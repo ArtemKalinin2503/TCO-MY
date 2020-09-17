@@ -1,0 +1,65 @@
+@import '../Pages/TechnicalServicePage/properties';
+
+.Divices {
+  &__wrapper {
+    background-color: #F1F1F1;
+    width: 100%;
+    display: flex;
+    .Divices {
+      font-family: RobotoCondensed, Arial;
+      color: #4E4D4D;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      a {
+        color: #4E4D4D;
+      }
+
+      h3 {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        margin: 38px 15px;
+
+        .button {
+          position: relative;
+          width: 190px;
+          height: 190px;
+          margin: 15px;
+
+          .shadow {
+            background-color: #aaa;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 185px;
+            height: 185px;
+          }
+
+          .message {
+            background-color: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 185px;
+            height: 185px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+  }
+}

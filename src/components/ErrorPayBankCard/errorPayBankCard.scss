@@ -1,0 +1,33 @@
+.errorPayBankCard {
+  &__title {
+    font-size: 24px;
+    margin-top: 40px;
+    text-align: center;
+  }
+  &__btn-wrapper {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    overflow: initial;
+    width: 100%;
+    .errorPayBankCard__btn {
+      width: 90px;
+      height: 70px;
+      margin-top: 30px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-yes {
+      background: #45b667;
+      margin-right: 35px;
+    }
+    .btn-no {
+      background: #d54082;
+    }
+  }
+}

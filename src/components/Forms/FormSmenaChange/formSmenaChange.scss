@@ -1,0 +1,23 @@
+.formSmenaChange {
+  &__wrapper {
+    .mainBlock {
+      margin-top: 40px;
+    }
+    .greenButton {
+      background: #45b667;
+      color: white;
+      margin-right: 20px;
+      float: right;
+      width: 295px;
+      margin: 0;
+      height: 60px;
+      font-size: 26px;
+    }
+  }
+  &__messageStatus {
+    font-size: 20px;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+  }
+}

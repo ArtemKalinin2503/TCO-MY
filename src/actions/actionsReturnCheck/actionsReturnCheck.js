@@ -1,0 +1,8 @@
+//Поиск чека для возврата
+export const FIND_CHECK_STARTED = 'FIND_CHECK_STARTED';
+export const FIND_CHECK_SUCCESS = 'FIND_CHECK_SUCCESS';
+export const FIND_CHECK_ERROR = 'FIND_CHECK_ERROR';
+//Процесс возврата
+export const RETURN_ORDER_STARTED = 'RETURN_ORDER_STARTED';
+export const RETURN_ORDER_SUCCESS = 'RETURN_ORDER_SUCCESS';
+export const RETURN_ORDER_ERROR = 'RETURN_ORDER_ERROR';

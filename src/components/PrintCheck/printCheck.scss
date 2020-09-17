@@ -1,0 +1,31 @@
+.printCheck {
+  &__wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 550px;
+    flex-wrap: wrap;
+  }
+  &__status {
+    width: 200px;
+    height: 0;
+    background: url(/images/checkWork.svg) no-repeat;
+    display: none;
+    &.visible {
+      display: block;
+      width: 100%;
+      min-height: 550px;
+      background-position-x: 50%;
+      background-position-y: 130px;
+      background-size: 200px;
+      flex-wrap: wrap;
+    }
+  }
+  &__text {
+    font-size: 34px;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+}

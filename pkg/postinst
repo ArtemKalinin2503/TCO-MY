@@ -1,0 +1,35 @@
+#!/bin/sh
+useradd --system -m pos
+
+if [ -f /etc/gdm/custom.conf ]; then
+    if [ ! -f /etc/gdm/custom.conf.orig ]; then
+        cp /etc/gdm/custom.conf /etc/gdm/custom.conf.orig
+    fi
+    cp /usr/share/tco32-front/custom.conf.dist /etc/gdm/custom.conf
+fi
+
+if [ -f /etc/X11/fly-dm/fly-dmrc ]; then
+    if [ ! -f /etc/X11/fly-dm/fly-dmrc.orig ]; then
+        cp /etc/X11/fly-dm/fly-dmrc /etc/X11/fly-dm/fly-dmrc.orig
+    fi
+    cp /usr/share/tco32-front/astra/fly-dmrc /etc/X11/fly-dm/fly-dmrc
+    if [ ! -f /etc/X11/Xsession.orig ]; then
+        cp /etc/X11/Xsession /etc/X11/Xsession.orig
+    fi
+    cp /usr/share/tco32-front/astra/Xsession /etc/X11/Xsession
+    chmod a+x /etc/X11/fly-dm/Xsession
+    # Disable Screen saver in Astra Linux
+    rm -f /usr/share/acpi-support/screenblank
+    find /usr/share/fly-wm/theme -name default.* -not -name "*.orig" -exec /usr/share/tco32-front/astra/fix-theme.sh {} \;
+fi
+
+if [ -f /etc/nginx/nginx.conf ]; then
+    # Remove nginx default server
+    rm -rf /etc/nginx/sites-enabled/default
+    cp /usr/share/tco32-front/astra/tco32.conf /etc/nginx/sites-enabled/
+    systemctl enable nginx
+fi
+
+# Disable Screen saver in xorg.conf
+mkdir -p /etc/X11/xorg.conf.d
+cp /usr/share/tco32-front/astra/10-monitor.conf /etc/X11/xorg.conf.d

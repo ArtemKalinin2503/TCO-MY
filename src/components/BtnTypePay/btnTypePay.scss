@@ -1,0 +1,73 @@
+.btnTypePay {
+  &__item {
+    display: none;
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+    &.isEnable {
+      display: block;
+    }
+  }
+  &__link {
+    color: black;
+    font-size: 18px;
+    text-decoration: none;
+  }
+}
+
+.btnTypePay {
+  position: relative;
+  width: 130px;
+  height: 110px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 18px;
+  overflow: initial;
+  background: none;
+  line-height: 20px;
+  padding-top: 54px;
+  margin-right: 35px;
+  &:last-child {
+    margin-right: 0;
+  }
+}
+.btn-bank-card {
+  &:before {
+    content: "";
+    display: block;
+    background: url(/images/creditCard.svg) no-repeat;
+    width: 72px;
+    height: 58px;
+    position: absolute;
+    background-size: contain;
+    top: 5px;
+  }
+}
+.btn-fuel-card {
+  &:before {
+    content: "";
+    display: block;
+    background: url(/images/fuelCard.svg) no-repeat;
+    width: 62px;
+    height: 50px;
+    position: absolute;
+    background-size: contain;
+    top: 13px;
+  }
+}
+.btn-cash {
+  &:before {
+    content: "";
+    display: block;
+    width: 75px;
+    height: 60px;
+    position: absolute;
+    top: -2px;
+    background: url(/images/btnTurnBack.png) no-repeat;
+    background-size: 74px;
+  }
+}

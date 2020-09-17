@@ -1,0 +1,78 @@
+@import '../Pages/TechnicalServicePage/properties';
+
+.Parameterization {
+  &__wrapper {
+    background-color: #F1F1F1;
+    width: 100%;
+    display: flex;
+    .Parameterization {
+      font-family: RobotoCondensed, Arial;
+      color: #4E4D4D;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      a {
+        color: #4E4D4D;
+        text-decoration: none;
+      }
+
+      h3 {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+
+      .greenButton {
+        color: #fff;
+        background-color: #25A74C;
+        width: 250px;
+        text-align: center;
+        padding: 10px 0;
+        margin: 10px 30px 10px 0;
+        font: normal 43px "Arial Rounded MT Bold";
+        float: right;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        margin: 38px 15px;
+        flex-wrap: wrap;
+
+        .button {
+          position: relative;
+          width: 150px;
+          height: 150px;
+          margin: 15px;
+
+          .shadow {
+            background-color: #aaa;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 145px;
+            height: 145px;
+          }
+
+          .message {
+            background-color: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 145px;
+            height: 145px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+  }
+}

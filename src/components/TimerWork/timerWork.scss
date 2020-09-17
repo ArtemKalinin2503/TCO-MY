@@ -1,0 +1,26 @@
+.timerWork {
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    .inVisible {
+      display: none;
+    }
+  }
+  &__text {
+    color: #71b6e5;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  &__time {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-top: 2px;
+    font-weight: bold;
+    color: #75c15e;
+  }
+}

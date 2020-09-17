@@ -1,0 +1,42 @@
+.returnScanCheck {
+  &__wrapper {
+    max-width: 860px;
+    margin: auto;
+  }
+  &__title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 50px;
+    margin-top: 100px;
+  }
+  &__img-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 150px;
+      background: url(/images/checkQR.svg) no-repeat;
+    }
+  }
+  &__btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 50px;
+    .btn-check {
+      width: 200px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      background: #45b667;
+      color: white;
+      margin-right: 20px;
+      justify-content: center;
+    }
+  }
+}

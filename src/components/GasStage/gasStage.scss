@@ -1,0 +1,87 @@
+.gasStage {
+  &__selectStage-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+  }
+
+  &__selectStage-list {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    list-style: 0;
+    width: 780px;
+  }
+
+  &__selectStage-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    background-color: #D3CACA;
+    border-radius: 50%;
+    &:before {
+      content: "";
+      display: block;
+      width: 90px;
+      height: 90px;
+      opacity: 0.4;
+    }
+    &:after {
+      content: "";
+      display: block;
+      background: url(/images/strel.svg) no-repeat;
+      background-size: contain;
+      width: 30px;
+      height: 46px;
+      position: absolute;
+      right: -45px;
+    }
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+    &.completedStep {
+      &:before {
+        opacity: 1;
+      }
+    }
+    &.selectGas {
+      &:before {
+        opacity: 1;
+        background: url(/images/btntrks.png) no-repeat;
+        background-size: contain;
+      }
+    }
+    &.selectFuel {
+      &:before {
+        background: url(/images/kaplay.png) no-repeat;
+        background-size: contain;
+      }
+    }
+    &.card {
+      &:before {
+        background: url(/images/pay.png) no-repeat;
+        background-size: contain;
+      }
+    }
+    &.pay {
+      &:before {
+        background: url(/images/btnTurnBack.png) no-repeat;
+        background-size: contain;
+      }
+    }
+    &.cheque {
+      &:before {
+        background: url(/images/btnPrintCheck.png) no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+}

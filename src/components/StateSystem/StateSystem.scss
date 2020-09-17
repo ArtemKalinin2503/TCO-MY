@@ -1,0 +1,130 @@
+@import '../Pages/TechnicalServicePage/properties';
+
+.StateSystem {
+  &__wrapper {
+    background-color: #F1F1F1;
+    width: 100%;
+    display: flex;
+    .StateSystem {
+      font-family: RobotoCondensed, Arial;
+      color: #4E4D4D;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      .system {
+        display: flex;
+      }
+
+      .laynch {
+        margin: 0;
+        padding: 0;
+        .text {
+          background-color: #fff;
+          width: 250px;
+          height: 400px;
+          p {
+            margin: 0;
+          }
+        }
+      }
+
+      .tsobuttons {
+        margin-right: 50px;
+        button {
+          display: block;
+          width: 150px;
+          height: 50px;
+          margin-bottom: 15px;
+          border: none;
+          background-color: #fff;
+          box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.3);
+          font-size: 17px;
+          color: #4E4D4D;
+        }
+        button.green {
+          background-color: #25A74C;
+          color: #fff;
+        }
+
+      }
+
+      a {
+        color: #4E4D4D;
+        text-decoration: none;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 41px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h3 {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h4 {
+        text-align: center;
+        font-size: 34px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h5 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 400;
+        margin: 5px 0;
+        color: red;
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 38px 15px;
+
+        .button {
+          position: relative;
+          width: 130px;
+          height: 130px;
+          margin: 10px;
+
+          .shadow {
+            background-color: #aaa;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 125px;
+            height: 125px;
+          }
+
+          .message {
+            background-color: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 125px;
+            height: 125px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+          }
+
+          .message p {
+            text-align: center;
+          }
+        }
+        .button.active {
+          .message {
+            background-color: #fff;
+          }
+        }
+      }
+    }
+
+  }
+}

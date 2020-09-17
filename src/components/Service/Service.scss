@@ -1,0 +1,92 @@
+@import '../Pages/TechnicalServicePage/properties';
+
+.Service {
+  &__wrapper {
+    background-color: #F1F1F1;
+    width: 100%;
+    display: flex;
+    .Service {
+      font-family: RobotoCondensed, Arial;
+      color: #4E4D4D;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      a {
+        color: #4E4D4D;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 41px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h3 {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h4 {
+        text-align: center;
+        font-size: 34px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h5 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 400;
+        margin: 5px 0;
+        color: red;
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 38px 100px;
+
+        .button {
+          position: relative;
+          width: $TechnicalServicePageServiceButtons;
+          height: $TechnicalServicePageServiceButtons;
+          margin: 10px;
+
+          .shadow {
+            background-color: #aaa;
+            position: absolute;
+            left: $ShadowTechnicalServicePageButtons;
+            top: $ShadowTechnicalServicePageButtons;
+            width: $TechnicalServicePageServiceButtons - $ShadowTechnicalServicePageButtons;
+            height: $TechnicalServicePageServiceButtons - $ShadowTechnicalServicePageButtons;
+          }
+
+          .message {
+            background-color: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: $TechnicalServicePageServiceButtons - $ShadowTechnicalServicePageButtons;
+            height: $TechnicalServicePageServiceButtons - $ShadowTechnicalServicePageButtons;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+          }
+
+          .message p {
+            text-align: center;
+          }
+        }
+        .button.active {
+          .message {
+            background-color: #fff;
+          }
+        }
+      }
+    }
+
+  }
+}

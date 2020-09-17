@@ -1,0 +1,63 @@
+@import "properties";
+
+.TechnicalService {
+  &__wrapper {
+    background-color: #F1F1F1;
+    display: flex;
+    width: 100%;
+    .TechnicalService {
+      font-family: "Open Sans Condensed Light", RobotoCondensed, Arial;
+      color: #4E4D4D;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      a {
+        color: #4E4D4D;
+      }
+
+
+      h3 {
+        text-align: center;
+        font-size: 33px;
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 38px 15px;
+
+        .button {
+          position: relative;
+          width: $TechnicalServicePageButtons;
+          height: $TechnicalServicePageButtons;
+          margin: 15px;
+
+          .shadow {
+            background-color: #aaa;
+            position: absolute;
+            left: $ShadowTechnicalServicePageButtons;
+            top: $ShadowTechnicalServicePageButtons;
+            width: $TechnicalServicePageButtons - $ShadowTechnicalServicePageButtons;
+            height: $TechnicalServicePageButtons - $ShadowTechnicalServicePageButtons;
+          }
+
+          .message {
+            background-color: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: $TechnicalServicePageButtons - $ShadowTechnicalServicePageButtons;
+            height: $TechnicalServicePageButtons - $ShadowTechnicalServicePageButtons;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 29px;
+          }
+        }
+      }
+    }
+
+  }
+}

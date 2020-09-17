@@ -1,0 +1,10 @@
+.btnBack {
+  &__wrapper {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    .btnBack {
+      width: 140px;
+    }
+  }
+}

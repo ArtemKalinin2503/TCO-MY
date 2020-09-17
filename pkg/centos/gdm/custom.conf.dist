@@ -1,0 +1,13 @@
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=pos
+
+[security]
+
+[xdmcp]
+
+[greeter]
+
+[chooser]
+
+[debug]

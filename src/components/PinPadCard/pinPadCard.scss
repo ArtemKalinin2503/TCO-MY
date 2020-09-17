@@ -1,0 +1,25 @@
+.pinPadCard {
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  &__information {
+    width: 400px;
+    height: 400px;
+    margin-top: 50px;
+    background: url(/images/cardWork.svg) no-repeat;
+  }
+  &__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #F7931E;
+  }
+}

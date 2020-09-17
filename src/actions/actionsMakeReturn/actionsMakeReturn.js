@@ -1,0 +1,5 @@
+//Процесс возврата
+export const MAKE_RETURN_RESET = 'MAKE_RETURN_RESET';
+export const MAKE_RETURN_SUCCESS = 'MAKE_RETURN_SUCCESS';
+export const MAKE_RETURN_FAIL = 'MAKE_RETURN_FAIL';
+export const MAKE_RETURN_TIMEOUT = 'MAKE_RETURN_TIMEOUT';

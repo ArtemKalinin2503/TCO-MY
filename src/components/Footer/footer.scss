@@ -1,0 +1,46 @@
+.footer {
+  &__wrapper {
+    flex: 0 0 auto;
+    background: #dfddec;
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    //position: absolute;
+    //width: 100%;
+    bottom: 0;
+    z-index: 1000;
+  }
+  &__status-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  &__status {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: silver;
+    margin-right: 10px;
+    &_work {
+      background: #24a94c;
+    }
+    &_not-work {
+      background: red;
+    }
+  }
+  &__status-error {
+    color: red;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  &__name-gadget {
+    font-size: 11px;
+  }
+  &__address {
+    font-size: 11px;
+  }
+  &__contacts {
+    font-size: 11px;
+    color: cornflowerblue;
+  }
+}

@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+if [ -f /etc/gdm/custom.conf.orig ]; then
+    cp /etc/gdm/custom.conf.orig /etc/gdm/custom.conf
+fi
+
+if [ -f /etc/X11/fly-dm/fly-dmrc.orig ]; then
+    cp /etc/X11/fly-dm/fly-dmrc.orig /etc/X11/fly-dm/fly-dmrc
+fi
+
+if [ -f /etc/X11/fly-dm/Xsession.orig ]; then
+    cp /etc/X11/fly-dm/Xsession.orig /etc/X11/fly-dm/Xsession
+fi
+
+if [ -f /etc/X11/xorg.conf.d/10-monitor.conf ]; then
+    rm /etc/X11/xorg.conf.d/10-monitor.conf
+fi
+
+rm -rf /etc/nginx/sites-enabled/tco32.conf

@@ -1,0 +1,11 @@
+.gasFuelSelect {
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 690px;
+    margin: 50px auto;
+  }
+}

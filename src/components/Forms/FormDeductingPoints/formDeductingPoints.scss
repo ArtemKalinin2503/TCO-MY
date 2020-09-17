@@ -1,0 +1,30 @@
+.formDeductingPoints {
+  &__wrapper {
+    margin-top: 20px;
+    display: flex;
+    .keyboardVirtual {
+      .input-keyboard {
+        margin-right: 40px;
+        padding-right: 60px;
+      }
+    }
+
+  }
+  &__info-wrapper {
+    font-size: 20px;
+    color: #9e9e9e;
+    padding-left: 10px;
+    width: 260px;
+    margin-bottom: 20px;
+  }
+  &__info {
+    height: 50px;
+    background: #afaead;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    width: 245px;
+    border-radius: 5px;
+    text-align: center;
+  }
+}

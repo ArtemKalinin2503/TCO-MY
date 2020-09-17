@@ -1,0 +1,41 @@
+.checkData {
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 840px;
+    margin: 50px auto;
+  }
+  &__btn-wrapper {
+    width: 100%;
+    max-width: 840px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 50px;
+    .btn {
+      width: 120px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+    .btn-dismiss {
+      background: #45b667;
+      color: white;
+      margin-right: 20px;
+    }
+    .btn-submit {
+      background: #d54082;
+      color: white;
+    }
+  }
+  &__title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 50px;
+  }
+
+}

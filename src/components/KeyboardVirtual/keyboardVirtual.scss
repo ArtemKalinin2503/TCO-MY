@@ -1,0 +1,50 @@
+.keyboardVirtual {
+  display: flex;
+  max-width: 840px;
+  .input-keyboard > label {
+    font-size: 20px;
+  }
+  .input-keyboard > input {
+    max-width: 290px;
+    display: block;
+  }
+}
+
+.keyboard-wrapper {
+  width: 300px;
+  min-width: 300px;
+  .buttons-numbers {
+    width: 80px;
+    height: 80px;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px;
+  }
+  .hg-theme-default .hg-row {
+    flex-wrap: wrap;
+  }
+}
+
+.formDataCheck {
+  &__wrapper {
+    .keyboard-wrapper {
+      width: 100%;
+      .buttons-all, .hg-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+    .keyboardVirtual {
+      display: flex;
+      flex-wrap: wrap;
+      input {
+        max-width: 100%;
+      }
+      .btn-dot-ru {
+        max-width: 80px;
+      }
+    }
+  }
+}
+

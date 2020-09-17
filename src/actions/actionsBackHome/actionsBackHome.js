@@ -1,0 +1,1 @@
+export const BACK_HOME = 'BACK_HOME';

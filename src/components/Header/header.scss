@@ -1,0 +1,56 @@
+.header {
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 5px 5px 5px;
+    letter-spacing: 0px;
+    font-family: "MyWebFont";
+  }
+  &__logo-wrapper {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 146px;
+    right: 0;
+    z-index: 1000;
+    padding-right: 12px;
+  }
+  &__logo {
+    height: 99.86px;
+    margin-right: 0px;
+  }
+  &__table {
+    height: 136px;
+    background: #4e4d4d;
+    width: 100%;
+    z-index: 10000;
+    color: #f39200;
+  }
+
+  &__phone {
+    position: fixed;
+    font-size: 56px;
+    padding-top: 25px;
+    padding-left: 10px;
+    color: #ffffff;
+  }
+  &__сlock {
+    position: fixed;
+    font-size: 33px;
+    opacity: 1;
+    right: 0;
+    text-align: right;
+    top: 0px;
+    padding-right: 12px;
+  }
+  &__address {
+    position: fixed;
+    display: table;
+    top: 65px;
+    font-size: 33px;
+    opacity: 1;
+    right: 0;
+    text-align: right;
+    padding-right: 10px;
+  }
+}
