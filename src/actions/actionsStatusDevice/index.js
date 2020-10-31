@@ -12,7 +12,9 @@ export const getDataDeviceStatus = () => {
     return dispatch => {
         dispatch(getStatusDeviceStarted())
         axios
-            .get(`${urlApi}/api-v01/payment/currentlist`, {})
+            .get(`${urlApi}/api-v01/payment/currentlist`,  {
+                timeout: 5000
+            })
             .then(res => {
                 dispatch(getStatusDeviceSuccess(res.data))
             })
@@ -36,6 +38,12 @@ export const getDataMessages = () => {
             })
     }
 }
+//Замена локального messages после удаления строки из массива.
+export const setMessages = (messages) => {
+    return dispatch => {
+        dispatch(getMessages(messages))
+    }
+}
 
 export default {
     getStatusDeviceStarted,
@@ -43,5 +51,6 @@ export default {
     getStatusDeviceFailure,
     getDataDeviceStatus,
     getMessages,
-    getDataMessages
+    getDataMessages,
+    setMessages
 }

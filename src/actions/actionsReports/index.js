@@ -15,7 +15,8 @@ import {
     OPEN_SMENA_FAILURE,
     CLOSE_SMENA_SUCCESS,
     CLOSE_SMENA_FAILURE,
-    CLEAR_ALL_REPORTS
+    CLEAR_ALL_REPORTS,
+    GET_IS_OPEN_SMENA
 } from './actionsReports';
 import {axiosInstance as axios} from "../../utils/utils";
 import {urlApi} from '../../utils/globalConst';
@@ -44,6 +45,8 @@ export const closeSmenaSuccess = (payload) => ({type: CLOSE_SMENA_SUCCESS, paylo
 export const closeSmenaFailure = (error) => ({type: CLOSE_SMENA_FAILURE, payload: {error}});
 //Отчистка всех отчетов
 export const clearAllReports = () => ({type: CLEAR_ALL_REPORTS})
+//Состояние смены Открыта/Закрыта
+export const getIsOpenSmena  = (payload) => ({ type: GET_IS_OPEN_SMENA, payload: payload });
 
 //Данный thunk - запускает Z-отчет
 export const getReportZ = () => {
@@ -98,6 +101,7 @@ export const getDataSmena = () => {
             .get(`${urlApi}/api-v01/auth/getsessionnumber`,{})
             .then(res => {
                 dispatch(getNumberSmenaSuccess(res.data))
+                dispatch(getIsOpenSmena(!res.data.isClose))
             })
             .catch(err => {
                 dispatch(getNumberSmenaFailure(err.message))

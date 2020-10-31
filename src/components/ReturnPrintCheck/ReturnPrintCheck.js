@@ -1,22 +1,18 @@
 import React, {Component} from "react";
-import { connect } from "react-redux";
 import "./returnPrintCheck.scss";
 
 class ReturnPrintCheck extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            statusReturn: {
-                printCheck: false,
-                returnApproved: false,
-                returnError: false
-            },
-            message: {
-                startPrint: "Печать чека...",
-                checkApproved: "Возврат прошел успешно возьмите чек",
-                errorCheck: "По техническим причинам возврат не прошел Обратитесь в службу поддержки 8 (800) 000-00-00"
-            }
+    state = {
+        statusReturn: {
+            printCheck: false,
+            returnApproved: false,
+            returnError: false
+        },
+        message: {
+            startPrint: "Печать чека...",
+            checkApproved: "Возврат прошел успешно возьмите чек",
+            errorCheck: "По техническим причинам возврат не прошел Обратитесь в службу поддержки 8 (800) 000-00-00"
         }
     }
 
@@ -32,16 +28,4 @@ class ReturnPrintCheck extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReturnPrintCheck);
+export default ReturnPrintCheck;

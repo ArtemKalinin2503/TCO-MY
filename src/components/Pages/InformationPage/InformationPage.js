@@ -13,6 +13,8 @@ import StateSystem from "../../StateSystem/StateSystem";
 import Divices from "../../Divices/Divices";
 import ManagingLocks from "../../ManagingLocks/ManagingLocks";
 import Parameterization from "../../Parameterization/Parameterization";
+import SmeniMessage from "../../SmeniMessage/SmeniMessage";
+
 import './informationPage.scss';
 
 class InformationPage extends Component {
@@ -32,6 +34,7 @@ class InformationPage extends Component {
                     <Route history={history}  path="/informationPage/technicalServicePage/service/divices" component={Divices} exact />
                     <Route history={history}  path="/informationPage/technicalServicePage/service/managinglocks" component={ManagingLocks} exact />
                     <Route history={history}  path="/informationPage/technicalServicePage/service/parameterization" component={Parameterization} exact />
+                    <Route history={history}  path="/informationPage/technicalServicePage/smenimessage" component={SmeniMessage} exact />
                 </Switch>
                 <BtnHome/>
                 <BtnBack history={history}/>

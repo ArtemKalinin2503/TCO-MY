@@ -2,7 +2,6 @@ import { GET_FUELPUMPS_STARTED, GET_FUELPUMPS_SUCCESS, GET_FUELPUMPS_FAILURE, GE
 
 const initialState = {
     fuelPumps: [],
-    filterFuelPumps: [],
     numberGasPistolUp: null,
     loadingFuelPumps: false,
     error: "",
@@ -11,6 +10,7 @@ const initialState = {
     responseUnLock: "",
     errorUnLock: "",
     numberSelectGas: 0,
+    arrGasPistolUp: []
 }
 
 export default function FuelPumpsReducer(state = initialState, action) {
@@ -26,51 +26,16 @@ export default function FuelPumpsReducer(state = initialState, action) {
             let newFuelPumpsData = action.payload;
             newFuelPumpsData.grades.sort((prev, next) => prev.id - next.id);
             fuelPumpsData = newFuelPumpsData;
-            //Дополню ответ от метода информацией о снятом пистолете
-            let gas = fuelPumpsData.pumps; //Топливо (пистолеты)
-            let gradeIdSelectPistol = "";
-            let numberGasPistolUp = null;
-            gas.map((itemGas) => {
-                return (
-                    // eslint-disable-next-line array-callback-return
-                    itemGas.nozzles.map((itemPistol) => {
-                        if (itemPistol.number === itemGas.nozzleNumber) {
-                            gradeIdSelectPistol = itemPistol.gradeId;
-                        }
-                    })
-                )
-            })
-            //Когда получили gradeId пистолета который подняли, добавим свойство pistolUp
-            // eslint-disable-next-line array-callback-return
-            fuelPumpsData.grades.map((item) => {
-                if (item.id === gradeIdSelectPistol) {
-                    item.pistolUp = true
-                } else {
-                    item.pistolUp = false
-                }
-            })
-            //Добавим номер колонки на которой подняли пистолет
-            // eslint-disable-next-line array-callback-return
-            gas.map((itemGas) => {
-                if (itemGas.nozzleStatus === "Up") {
-                    // eslint-disable-next-line array-callback-return
-                    fuelPumpsData.grades.map((item) => {
-                        item.numberGasPistolUp = itemGas.number;
-                        numberGasPistolUp = item.numberGasPistolUp;
-                    })
-                }
-            })
-            //Отфильтруем массив с пистолетами и оставим только один пистолет который поднят
-            const resultFilterGrades = fuelPumpsData.grades.filter(grades => grades.id === gradeIdSelectPistol);
-            let newGradesArr = {
-                grades: resultFilterGrades
-            }
+
+            //Топливо (пистолеты) которые подняты
+            let gas = fuelPumpsData.pumps;
+            const arrGasPistolUp = gas.filter(pumps => pumps.nozzleStatus === "Up");
+
             return {
                 ...state,
                 loadingFuelPumps: false,
                 fuelPumps: fuelPumpsData,
-                filterFuelPumps: newGradesArr,
-                numberGasPistolUp: numberGasPistolUp
+                arrGasPistolUp: arrGasPistolUp
             };
         case GET_FUELPUMPS_FAILURE:
             let errorMessage = action.payload;

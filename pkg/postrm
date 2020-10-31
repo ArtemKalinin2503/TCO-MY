@@ -17,4 +17,4 @@ if [ -f /etc/X11/xorg.conf.d/10-monitor.conf ]; then
     rm /etc/X11/xorg.conf.d/10-monitor.conf
 fi
 
-rm -rf /etc/nginx/sites-enabled/tco32.conf
+#rm -rf /etc/nginx/sites-enabled/tco32.conf

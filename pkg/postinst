@@ -23,12 +23,12 @@ if [ -f /etc/X11/fly-dm/fly-dmrc ]; then
     find /usr/share/fly-wm/theme -name default.* -not -name "*.orig" -exec /usr/share/tco32-front/astra/fix-theme.sh {} \;
 fi
 
-if [ -f /etc/nginx/nginx.conf ]; then
-    # Remove nginx default server
-    rm -rf /etc/nginx/sites-enabled/default
-    cp /usr/share/tco32-front/astra/tco32.conf /etc/nginx/sites-enabled/
-    systemctl enable nginx
-fi
+#if [ -f /etc/nginx/nginx.conf ]; then
+#    # Remove nginx default server
+#    rm -rf /etc/nginx/sites-enabled/default
+#    cp /usr/share/tco32-front/astra/tco32.conf /etc/nginx/sites-enabled/
+#    systemctl enable nginx
+#fi
 
 # Disable Screen saver in xorg.conf
 mkdir -p /etc/X11/xorg.conf.d

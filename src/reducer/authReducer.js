@@ -27,7 +27,6 @@ export default function AuthReducer(state = initialState, action) {
                 loadingAuthUser: true
             };
         case USER_AUTH_SUCCESS:
-            console.log(action.payload)
             return {
                 ...state,
                 loadingAuthUser: false,

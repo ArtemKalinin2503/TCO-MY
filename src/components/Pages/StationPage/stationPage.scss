@@ -2,6 +2,10 @@
   &__wrapper {
     position: relative;
     width: 100%;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
   &__link-home {
     position: absolute;
@@ -12,7 +16,7 @@
     width: 66px;
     height: 70px;
     display: block;
-    background: url('/images/icon-home.svg') no-repeat;
+    background: url("/images/icon-home.svg") no-repeat;
     background-size: auto;
     border: none;
     &:focus {

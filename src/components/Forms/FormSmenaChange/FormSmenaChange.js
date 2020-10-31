@@ -6,15 +6,19 @@ import './formSmenaChange.scss';
 
 class FormSmenaChange extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            numberSmeny: 0,
-            checkStatus: false,
-            openSmena: false,
-        }
+    state = {
+        numberSmeny: 0,
+        checkStatus: false,
+        openSmena: false,
     }
 
+    componentDidMount() {
+        //Выставим фокус на input SmeniChange
+        let inputSmeniChange = document.getElementById('numberSmeny');
+        if (inputSmeniChange) {
+            inputSmeniChange.focus()
+        }
+    }
     //Получим введеный номер смены
     getNumberSmeny = (numberSmeny) => {
         this.setState({
@@ -74,16 +78,12 @@ class FormSmenaChange extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        openSmenaSuccess: state.ReportReducer.openSmenaSuccess,
-    }
-}
+const mapStateToProps = (state) => ({
+    openSmenaSuccess: state.ReportReducer.openSmenaSuccess,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        setOpenSmena: (numberSmena) => dispatch(setOpenSmena(numberSmena)),
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    setOpenSmena: (numberSmena) => dispatch(setOpenSmena(numberSmena)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormSmenaChange);

@@ -1,20 +1,21 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom';
 import FormDeductingPoints from "../Forms/FormDeductingPoints/FormDeductingPoints";
 import { getTypePay } from "../../actions/actionsSelectFuel";
+import { stageActive } from "../../actions/actionsStageProgress";
 import "./deductingPoints.scss";
 
 class DeductingPoints extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            deductPoints: false,
-            skipPoints: false
-        }
+    state = {
+        deductPoints: false,
+        skipPoints: false
     }
-
+    componentDidMount() {
+        //Шаг стадия оплаты топлива
+        this.props.stageActive("DeductingPoints");
+    }
     //Кнопка списать баллы
     handlerDeductPoints = () => {
         this.props.getTypePay("LOYALTY"); //Передадим тип оплаты LOYALTY в store
@@ -36,59 +37,62 @@ class DeductingPoints extends Component {
             skipPoints: false
         })
     }
+    renderGasFuel() {
+        let _numberGas = this.props.dataFuel.numberGas;
+        let _fuelId = this.props.dataFuel.fuelId ? this.props.dataFuel.fuelId : "crossedcircle";
+        return (
+            <>
+                <div className="deductingPoints__head">Введите сумму баллов к списанию</div>
+                <div className="deductingPoints__pagefuel">
+                    <div className="deductingPoints__columngas">
+                        <div className="deductingPoints__columngas__text">Колонка</div>
+                        <div className="deductingPoints__columngas__num">{_numberGas}</div>
+                    </div>
+                    <div className="deductingPoints__choosefuel">
+                        <div className="deductingPoints__choosefuel__text">Топливо</div>
+                        <img src={`/images/${_fuelId}.svg`} alt="топливо"
+                            className="deductingPoints__choosefuel__fuelId" />
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     render() {
         if (this.state.deductPoints) {
-            return <Redirect to="/stationPage/pinPadCard/"/>
+            return <Redirect to="/stationPage/pinPadCard/" />
         }
         if (this.state.skipPoints) {
-            return <Redirect to="/stationPage/pinPadCard/"/>
+            return <Redirect to="/stationPage/pinPadCard/" />
         }
         return (
             <div className="deductingPoints__wrapper">
-                <div className="deductingPoints__title">
-                    Введите сумму баллов к списанию
-                </div>
-                <div className="deductingPoints__infoOrder-wrapper">
-                    <div className="deductingPoints__infoOrder-item">
-                        <p>Колонка</p>
-                        <span className="deductingPoints__infoOrder-gas">{this.props.selectFuel.numberGas}</span>
+                {this.renderGasFuel()}
+                <div className="deductingPoints__keyboard">
+                    <FormDeductingPoints />
+                    <div className="deductingPoints__btn_wrapper" >
+                        <div className="deductingPoints__btnAddBall" onClick={this.handleSkip}>
+                            <div className="deductingPoints__textbtnf">Пропустить</div>
+                            <div className="deductingPoints__textbtns">(начислить баллы)</div>
+                        </div>
+                        <div className="deductingPoints__btnWriteBall" onClick={this.handlerDeductPoints}>
+                            <div className="deductingPoints__textbtn">Списать</div>
+                        </div>
                     </div>
-                    <div className="deductingPoints__infoOrder-item">
-                        <p>Топливо</p>
-                        <span className="deductingPoints__infoOrder-fuel">{this.props.selectFuel.nameFuel}</span>
-                    </div>
-                </div>
-                <FormDeductingPoints />
-                <div className="deductingPoints__btn-wrapper">
-                    <button
-                        className="deductingPoints__btnAddBall"
-                        onClick={this.handleSkip}
-                    >
-                        Пропустить (начислить баллы)
-                    </button>
-                    <button
-                        className="deductingPoints__btnWriteBall"
-                        onClick={this.handlerDeductPoints}
-                    >
-                        Списать
-                    </button>
                 </div>
             </div>
         )
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        selectFuel: state.OrderFuelReducer.selectFuel,
-    }
-}
+const mapStateToProps = (state) => ({
+    selectFuel: state.OrderFuelReducer.selectFuel,
+    dataFuel: state.SelectFuelReducer.selectFuel,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getTypePay: (typePay) => dispatch(getTypePay(typePay))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getTypePay: (typePay) => dispatch(getTypePay(typePay)),
+    stageActive: (payload) => dispatch(stageActive(payload)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeductingPoints);

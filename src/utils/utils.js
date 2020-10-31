@@ -33,11 +33,13 @@ const requestHandler = async (request) => {
     //Если токена нет тггда получим и запишем localStorage
     if (!accessToken) {
         let accessTokenResponse = await axios
-            .post(`${urlApi}/api-v01/auth/login`,{
+            .post(`${urlApi}/api-v01/auth/login`, {
                 "login": "",
                 "password": "",
-                "controllerUniqueId": "string"
-            })
+                "controllerUniqueId": "string"},
+                {
+                    timeout: 3000
+        })
         accessToken = accessTokenResponse.data
         localStorage.setItem('loginToken', JSON.stringify(accessToken));
     }

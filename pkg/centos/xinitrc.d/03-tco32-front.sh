@@ -28,10 +28,10 @@ if [ $USER = pos ]; then
     rm -rf ~/.cache/chromium
     rm -rf ~/.config/chromium
     # Экран ТСО32
-    chromium http://127.0.0.1 --window-size=1060,1900 --start-fullscreen --kiosk --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disable-pinch --overscroll-history-navigation=0
+    chromium http://127.0.0.1:5000/app/index.html --window-size=1060,1900 --start-fullscreen --kiosk --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disable-pinch --overscroll-history-navigation=0
     # Экран ТСО32 без киоска
-    #chromium http://127.0.0.1 --window-size=1060,1900 --start-fullscreen --disable-translate --no-first-run --fast --fast-start -disable-features=TranslateUI
+    #chromium http://127.0.0.1:5000/app/index.html --window-size=1060,1900 --start-fullscreen --disable-translate --no-first-run --fast --fast-start -disable-features=TranslateUI
     # Экран Virtual Box
-    #chromium http://127.0.0.1 --window-size=1580,880 --start-fullscreen --kiosk --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI
+    #chromium http://127.0.0.1:5000/app/index.html --window-size=1580,880 --start-fullscreen --kiosk --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI
     exit
 fi

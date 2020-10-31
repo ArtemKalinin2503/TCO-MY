@@ -1,10 +1,17 @@
 .btnBack {
-  &__wrapper {
-    position: absolute;
-    bottom: 50px;
-    left: 50px;
-    .btnBack {
-      width: 140px;
-    }
+  width: 77px;
+  height: 83px;
+  display: block;
+  background: url("/images/icon-back.svg") no-repeat;
+  background-size: auto;
+  border: none;
+  position: absolute;
+  left: 50px;
+  bottom: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+  &:active {
+    background: #767676;
   }
 }

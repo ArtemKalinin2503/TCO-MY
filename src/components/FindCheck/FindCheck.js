@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import CountDownRedirect from "../CountDownRedirect/CountDownRedirect";
 import FormRequisitesCheck from "../Forms/FormRequisitesCheck/FormRequisitesCheck";
 import {resetFindCheck, startFindCheck, stopFindCheck, waitFindCheck, getFindCheck} from "../../actions/actionsFindCheck";
 import "./findCheck.scss";
@@ -19,6 +20,7 @@ class FindCheck extends Component {
     }
 
     componentDidMount() {
+        console.log('FindCheck.componentDidMount');
         this.props.startFindCheck();
     }
 
@@ -35,7 +37,10 @@ class FindCheck extends Component {
         if (props.waitScannedError !== state.waitScannedError) {
             return {waitScannedError: props.waitScannedError}
         }
-       return null;
+        if (props.searchError !== state.searchError) {
+            return {searchError: props.searchError}
+        }
+        return null;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -60,6 +65,9 @@ class FindCheck extends Component {
             if (this.state.waitScannedError === 304) {
                 this.setState({error: null});
                 this.props.waitFindCheck();
+            }
+            else {
+                console.log('>>>>> CHECK SEARCH ERROR ', this.state.waitScannedError);
             }
         }
         if (prevState.foundId !== this.state.foundId) {
@@ -110,13 +118,27 @@ class FindCheck extends Component {
         if (this.state.inProgress) {
             if (this.state.id) {
                 return (
-                    <Redirect to={`/makeReturnPage/${this.state.id}`} />
+                    <Redirect to={`/returnPage/process/${this.state.id}`} />
+                )
+            }
+            else
+            if (this.state.searchError) {
+                return (
+                    <div className="findCheck__wrapper">
+                        <CountDownRedirect text={'Переход на главный экран через'} duration={10}/>
+                        <div className="findCheck__title">
+                            <p>
+                                Чек не найден
+                            </p>
+                        </div>
+                    </div>
                 )
             }
             else
             if (this.state.scanCheck) {
                 return (
                     <>
+                        <CountDownRedirect text={"До окончания сессии осталось: "} />
                         <div className="findCheck__title">
                             Отсканируйте QR-код или штрих-код
                         </div>
@@ -165,25 +187,21 @@ class FindCheck extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        inProgress: state.FindCheckReducer.inProgress,
-        error: state.FindCheckReducer.error,
-        scannedId: state.FindCheckReducer.scannedId,
-        waitScannedError: state.FindCheckReducer.waitScannedError,
-        foundId: state.FindCheckReducer.foundId,
-        searchError: state.FindCheckReducer.searchError
-    }
-}
+const mapStateToProps = (state) => ({
+    inProgress: state.FindCheckReducer.inProgress,
+    error: state.FindCheckReducer.error,
+    scannedId: state.FindCheckReducer.scannedId,
+    waitScannedError: state.FindCheckReducer.waitScannedError,
+    foundId: state.FindCheckReducer.foundId,
+    searchError: state.FindCheckReducer.searchError
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        resetFindCheck: () => dispatch(resetFindCheck()),
-        startFindCheck: () => dispatch(startFindCheck()),
-        stopFindCheck: () => dispatch(stopFindCheck()),
-        waitFindCheck: () => dispatch(waitFindCheck()),
-        getFindCheck: (fp) => dispatch(getFindCheck(fp))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    resetFindCheck: () => dispatch(resetFindCheck()),
+    startFindCheck: () => dispatch(startFindCheck()),
+    stopFindCheck: () => dispatch(stopFindCheck()),
+    waitFindCheck: () => dispatch(waitFindCheck()),
+    getFindCheck: (fp) => dispatch(getFindCheck(fp))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindCheck);

@@ -16,7 +16,7 @@ class FormDataCheck extends Component {
                 <div className="row">
                     <KeyboardVirtual
                         activeComponent="formDataCheck"
-                        getContact={(phone, email) => this.getContact(phone, email)}
+                        getContact={(email, phone) => this.getContact(email, phone)}
                         type="TwoInput"
                         keyboardType="full"
                     />

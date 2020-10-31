@@ -2,16 +2,22 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom';
 import KeyboardVirtual from "../../KeyboardVirtual/KeyboardVirtual";
-import { loginAuth, passAuth,addLoginUser,userAuthExit } from '../../../actions/actionsAuth';
+import { loginAuth, passAuth, addLoginUser, userAuthExit } from '../../../actions/actionsAuth';
 import './formLogin.scss';
 
 class FormLogin extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            checkedToken: false,
-            exitAuth: false,
-            messageAuth: ""
+
+    state = {
+        checkedToken: false,
+        exitAuth: false,
+        messageAuth: ""
+    }
+
+    componentDidMount() {
+        //Выставим фокус на input Логин
+        let inputLogin = document.getElementById('login');
+        if (inputLogin) {
+            inputLogin.focus()
         }
     }
 
@@ -46,12 +52,12 @@ class FormLogin extends Component {
         //Если пришел токен - значит авторизация прошла успешно
         if (this.state.checkedToken) {
             if (this.props.tokenAutUser.accessToken) {
-                return <Redirect to="/informationPage/technicalServicePage"/> // редирект на техническое обслуживание
+                return <Redirect to="/informationPage/technicalServicePage" /> // редирект на техническое обслуживание
             }
         }
         //Если нажали на Выход
         if (this.state.exitAuth) {
-            return <Redirect to="/"/>
+            return <Redirect to="/" />
         }
         return (
             <div className="formLogin__wrapper">
@@ -89,22 +95,18 @@ class FormLogin extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        loginAuth: state.AuthReducer.loginAuth,
-        passAuth: state.AuthReducer.passAuth,
-        errorToken: state.AuthReducer.error,
-        tokenAutUser: state.AuthReducer.tokenAutUser
-    }
-}
+const mapStateToProps = (state) => ({
+    loginAuth: state.AuthReducer.loginAuth,
+    passAuth: state.AuthReducer.passAuth,
+    errorToken: state.AuthReducer.error,
+    tokenAutUser: state.AuthReducer.tokenAutUser
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        actLoginAuth: (payload) => dispatch(loginAuth(payload)),
-        actPassAuth: (payload) => dispatch(passAuth(payload)),
-        addLogin: (loginVal, passVal) => dispatch(addLoginUser(loginVal, passVal)),
-        exitLogin: () => dispatch(userAuthExit())
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    actLoginAuth: (payload) => dispatch(loginAuth(payload)),
+    actPassAuth: (payload) => dispatch(passAuth(payload)),
+    addLogin: (loginVal, passVal) => dispatch(addLoginUser(loginVal, passVal)),
+    exitLogin: () => dispatch(userAuthExit())
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormLogin)

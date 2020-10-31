@@ -36,10 +36,8 @@ class Footer extends Component{
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        opt: state.OptModeReducer.optMode,
-    }
-}
+const mapStateToProps = (state) => ({
+    opt: state.OptModeReducer.optMode,
+})
 
 export default connect(mapStateToProps)(Footer)

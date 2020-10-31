@@ -22,3 +22,5 @@ export const CLOSE_SMENA_SUCCESS = 'CLOSE_SMENA_SUCCESS';
 export const CLOSE_SMENA_FAILURE = 'CLOSE_SMENA_FAILURE';
 //Для отчистки всех отчетов
 export const CLEAR_ALL_REPORTS = 'CLEAR_ALL_REPORTS';
+//Состояние смены Открыта/Закрыта
+export const GET_IS_OPEN_SMENA = 'GET_IS_OPEN_SMENA';

@@ -7,6 +7,7 @@
   .input-keyboard > input {
     max-width: 290px;
     display: block;
+    background-color: white;
   }
 }
 
@@ -29,7 +30,8 @@
   &__wrapper {
     .keyboard-wrapper {
       width: 100%;
-      .buttons-all, .hg-button {
+      .buttons-all,
+      .hg-button {
         width: 50px;
         height: 50px;
         font-size: 20px;
@@ -48,3 +50,32 @@
   }
 }
 
+.preset {
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  width: 54px;
+  height: 50px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border-radius: 0;
+  &__wrapper {
+    max-width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: content-box;
+  }
+  &_sum {
+    background-color: #45b667;
+  }
+  &_litres {
+    background-color: #c7c6c6;
+  }
+  .preset-text {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}

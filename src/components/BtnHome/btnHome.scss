@@ -1,8 +1,8 @@
 .btn-home {
-  width: 66px;
-  height: 70px;
+  width: 91px;
+  height: 91px;
   display: block;
-  background: url('/images/icon-home.svg') no-repeat;
+  background: url("/images/icon-home.svg") no-repeat;
   background-size: auto;
   border: none;
   position: absolute;
@@ -15,5 +15,8 @@
   }
   &:hover {
     cursor: pointer;
+  }
+  &:active {
+    background: #767676;
   }
 }

@@ -15,7 +15,13 @@
     list-style: 0;
     width: 780px;
   }
-
+  &__selectSatge_line {
+    align-content: center;
+    width: 55px;
+    height: 1px;
+    background-color: #4e4d4d;
+    border: none;
+  }
   &__selectStage-item {
     position: relative;
     display: flex;
@@ -23,24 +29,14 @@
     justify-content: center;
     width: 110px;
     height: 110px;
-    background-color: #D3CACA;
+    background-color: #d3caca;
     border-radius: 50%;
     &:before {
       content: "";
       display: block;
       width: 90px;
       height: 90px;
-      opacity: 0.4;
-    }
-    &:after {
-      content: "";
-      display: block;
-      background: url(/images/strel.svg) no-repeat;
-      background-size: contain;
-      width: 30px;
-      height: 46px;
-      position: absolute;
-      right: -45px;
+      opacity: 0;
     }
     &:last-child {
       &:after {
@@ -54,32 +50,38 @@
     }
     &.selectGas {
       &:before {
+        height: 80px;
+        width: 80px;
         opacity: 1;
-        background: url(/images/btntrks.png) no-repeat;
+        background: center url(/images/trkgreen.svg) no-repeat;
         background-size: contain;
       }
     }
     &.selectFuel {
       &:before {
-        background: url(/images/kaplay.png) no-repeat;
+        height: 80px;
+        width: 80px;
+        background: center url(/images/kaplaygreen.svg) no-repeat;
         background-size: contain;
       }
     }
     &.card {
       &:before {
-        background: url(/images/pay.png) no-repeat;
+        background: center url(/images/cardgreen.svg) no-repeat;
         background-size: contain;
       }
     }
     &.pay {
       &:before {
-        background: url(/images/btnTurnBack.png) no-repeat;
+        background: center url(/images/paygreen.svg) no-repeat;
         background-size: contain;
       }
     }
-    &.cheque {
+    &.check {
       &:before {
-        background: url(/images/btnPrintCheck.png) no-repeat;
+        height: 70px;
+        width: 70px;
+        background: center url(/images/checkgreen.svg) no-repeat;
         background-size: contain;
       }
     }

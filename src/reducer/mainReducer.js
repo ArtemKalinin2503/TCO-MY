@@ -13,6 +13,9 @@ import BackHomeReducer from "./backHomeReducer";
 import FindCheckReducer from "./findCheckReducer";
 import MakeReturnReducer from "./makeReturnReducer"
 import ReportReducer from "./reportReducer"
+import TestAnswerMessages from "./testAnswerMessages"
+import SettingsReducer from './settingsReducer'
+
 
 //Основной Reducer - который принимает остальные reducer
 export default combineReducers({
@@ -29,5 +32,7 @@ export default combineReducers({
     FindCheckReducer,
     MakeReturnReducer,
     ReportReducer,
-    ReturnOrderReducer
+    ReturnOrderReducer,
+    TestAnswerMessages,
+    SettingsReducer
 });

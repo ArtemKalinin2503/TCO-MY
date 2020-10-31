@@ -9,7 +9,7 @@ import {
 
 //Процесс возврата
 const notifyReturnOrderReset = () => ({type: MAKE_RETURN_RESET});
-const notifyReturnOrderSuccess = (status, info) => ({type: MAKE_RETURN_SUCCESS});
+const notifyReturnOrderSuccess = (payload) => ({type: MAKE_RETURN_SUCCESS, payload: payload});
 const notifyReturnOrderError = () => ({type: MAKE_RETURN_FAIL});
 const notifyReturnOrderTimeout = () => ({type: MAKE_RETURN_TIMEOUT});
 
@@ -20,7 +20,7 @@ const returnProc = (id, continue_=false) => {
             .put(makeUrl(`/cart/0/fuelrefundbyreceiptidentifier?receiptIdentifier=${id}&continue=${continue_}`), {})
             .then(res => {
                 console.log('***** MakeReturn result: ', res.status, res.data);
-                dispatch(notifyReturnOrderSuccess());
+                dispatch(notifyReturnOrderSuccess(res.data));
             })
             .catch(error => {
                  console.log('***** MakeReturn catch: >>> ', error.message);
@@ -33,10 +33,7 @@ const returnProc = (id, continue_=false) => {
                     console.log(error.response.status);
                     console.log(error.response.headers);
 
-                    if (error.response.status === 400) { // temporary for continue
-                        //let info = error.response.data;
-                        dispatch(notifyReturnOrderError());
-                    }
+                    dispatch(notifyReturnOrderError());
                 } else if (error.request) {
                     /*
                      * The request was made but no response was received, `error.request`

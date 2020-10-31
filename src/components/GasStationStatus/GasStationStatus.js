@@ -1,77 +1,91 @@
-import React, {Component} from "react";
-import './gasStationStatus.scss'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import './gasStationStatus.scss';
 
 //Компонент визуализации колонки с выводом статуса колонки на АЗС
 class GasStationStatus extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            statusGas: "",
-            returnUnlockGas: false
-        }
+
+    state = {
+        notWork: false, //Не работает
+        employed: false, //Занята
+        free: true, //Свободно
+        intervalGasStatus: 0
     }
 
     componentDidMount() {
-        this.statusGasStation();
+        let intervalGasStatus = setInterval(function () {
+            this.checkedStatusGas();
+        }.bind(this), 1000);
         this.setState({
-            statusGas: this.statusGasStation(),
-            returnUnlockGas: true
+            intervalGasStatus: intervalGasStatus
         })
-
     }
 
     componentWillUnmount() {
-        this.setState({
-            returnUnlockGas: false
-        })
+        clearInterval(this.state.intervalGasStatus)
     }
 
-    statusGasStation() {
-        let status;
-        if (this.props.gasStationStatus) {
-            switch(this.props.gasStationStatus) {
-                case 'Non_reachable':
-                case 'Inoperative':
-                case 'Close':
-                    status = "Не работает"
-                    break;
-                case 'Idle':
-                case 'Calling':
-                    status = "Свободно"
-                    if(this.props.posOwner !== 0 || this.props.typeConfig !== "PREAUTH")
-                    {
-                        status = "Занята"
-                    }
-                    break;
-                default:
-                    status = "Занята"
-            }
-        }
-
-        return status;
-
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.gasStationStatus !== this.props.gasStationStatus) {
+    //Проверка Статуса ТРК
+    checkedStatusGas = () => {
+        //Статус Не работает
+        if (this.props.gasStationStatus === 'None' || this.props.gasStationStatus === 'Error' || this.props.gasStationStatus === 'Close') {
             this.setState({
-                statusGas: this.statusGasStation()
+                notWork: true
+            })
+        } else {
+            this.setState({
+                notWork: false
+            })
+        }
+        //Статус Занята
+       if (this.props.posOwner !== 0 || this.props.typeConfig !== "PREAUTH") {
+            this.setState({
+                employed: true
+            })
+        }
+        else {
+           this.setState({
+               employed: false
+           })
+        }
+        //Статус Свободно
+        if (!this.state.notWork && !this.state.employed) {
+            this.setState({
+                free: true
+            })
+        } else {
+            this.setState({
+                free: false
             })
         }
     }
 
+    renderGasStatus = () => {
+       return <div className={this.state.free ? "gasStation-item__wrapper Free" : "gasStation-item__wrapper notFree"}>
+           <Link
+               className="gasStation-item__link"
+               to={this.state.free ? `/stationPage/gasFuelSelect/${this.props.numberGasStation}` : "/stationPage/"}
+           >
+               <div className="gasStation-item__number-wrapper">
+                   <div className={this.state.free ? "gasStation-item__description" : "gasStation-item__description notFree"}>
+                       <div className="gasStation-item__number">{this.props.numberGasStation}</div>
+                   </div>
+               </div>
+               <div className={this.state.free ? "gasStation-item__status-wrapper" : "gasStation-item__status-wrapper notFree"}>
+                   {this.state.notWork ? <p className="gasStation-item__status">Не работает</p> : null}
+                   {this.state.employed ? <p className="gasStation-item__status">Занята</p> : null}
+                   {this.state.free ? <p className="gasStation-item__status">Свободно</p> : null}
+               </div>
+           </Link>
+       </div>
+    }
+
     render() {
         return (
-            <div className={this.state.statusGas === "Свободно" ? "gasStation-item__wrapper freeGas" : "gasStation-item__wrapper"}>
-                <div className="gasStation-item__number-wrapper">
-                    <p className="gasStation-item__number">{this.props.numberGasStation}</p>
-                </div>
-                <div className="gasStation-item__status-wrapper">
-                    <p className="gasStation-item__status">{this.state.statusGas}</p>
-                </div>
+            <div className="item-gas__wrapper">
+                {this.renderGasStatus()}
             </div>
         )
     }
 }
-
 export default GasStationStatus;

@@ -25,7 +25,8 @@ message("Constructing Makefiles for ${PROJECT_NAME} ver ")
 SET(CMAKE_INSTALL_PREFIX /)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build/
-    DESTINATION usr/share/tco32-front/www/
+    #DESTINATION usr/share/tco32-front/www/
+    DESTINATION usr/posrest/app/
     USE_SOURCE_PERMISSIONS
     )
 
@@ -65,7 +66,7 @@ if(BUILD_RPM)
     )
     set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/postinst")
     set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/postrm")
-    set(CPACK_RPM_PACKAGE_REQUIRES "coreutils findutils sed bash systemd xterm chromium nginx")
+    set(CPACK_RPM_PACKAGE_REQUIRES "coreutils findutils sed bash systemd xterm chromium posrest")
 else()
     INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/astra
         DESTINATION usr/share/tco32-front
@@ -78,7 +79,7 @@ else()
         "${CMAKE_CURRENT_SOURCE_DIR}/conffiles"
     )
     set(CPACK_DEBIAN_PACKAGE_SECTION "misc")
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "bash, sed, klibc-utils, systemd, coreutils, findutils, xterm, chromium, nginx")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "bash, sed, klibc-utils, systemd, coreutils, findutils, xterm, chromium, posrest")
 endif()
 
 include(CPack)

@@ -1,85 +1,117 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import { getOpt } from "../../../actions/actionsOperatingMode";
 import Preloader from "../../Preloader/Preloader";
 import { addLoginUser } from "../../../actions/actionsAuth";
-import {actionClearCart, clearPayment, getWidgetClear, getCartFuel, getWidgetId} from "../../../actions/actionsPayOrder";
-import {unlockGas} from "../../../actions/actionsFuelPumps";
-import {clearToken} from "../../../utils/utils";
-import {clearOrderData} from "../../../actions/actionsOrderFuel";
-import {backHome} from "../../../actions/actionsBackHome";
-import {getDataDeviceStatus, getDataMessages} from "../../../actions/actionsStatusDevice";
+import { actionClearCart, clearPayment, getWidgetClear, getCartFuel, getWidgetId, clearCartStore, clearPaymentInfo } from "../../../actions/actionsPayOrder";
+import { getFuelPumps, unlockGas } from "../../../actions/actionsFuelPumps";
+import { clearToken } from "../../../utils/utils";
+import { clearOrderData } from "../../../actions/actionsOrderFuel";
+import { backHome } from "../../../actions/actionsBackHome";
+import { getDataDeviceStatus, getDataMessages } from "../../../actions/actionsStatusDevice";
+import { stageActive } from "../../../actions/actionsStageProgress";
 import './homePage.scss';
+import { getDataSmena } from "../../../actions/actionsReports";
 //RxJs
 import { interval } from "rxjs";
 import { takeWhile } from 'rxjs/operators'
+import ComponentWaiting from "../../ComponentWaiting/ComponentWaiting";
+import BtnHomePage from "../../../components/BtnHomePage/BtnHomePage";
 
 class HomePage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            checkedMessages: false,
-            intervalId: 0,
-            selectGas: false,
-            //Для определния статусу оборудования
-            cashDisabled: false,
-            fuelCardDisabled: false,
-            bankCardDisabled: false,
-            statusGadgetPayError: false,
-        }
+    state = {
+        checkedMessages: false,
+        selectInfo: false,
+        getSubscription: null,
+        allGasNotWork: false,
+        intervalCheckedGasStatus: 0
     }
 
     componentDidMount() {
+        //Шаг стадия оплаты топлива
+        this.props.stageActive("HomePage");
+
         //Сбросить токен чтобы выполнить логин
-        clearToken();
+        //clearToken();
 
-        //Для искуственой задержки
-        setTimeout(function () {
-            this.checkedOptMode();
-        }.bind(this), 1500)
-
+        //Запрос авторизации приложения
         this.checkedOptMode();
 
+        this.backgroundSurvey();
+    }
 
-        setTimeout(function () {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.opt.state !== prevProps.opt.state) {
+            this.backgroundSurvey();
+        }
+    }
+
+    //Фоновые процессы
+    backgroundSurvey = () => {
+        console.log('backgroundSurvey')
+        //Так как каждый метод реста работает только если есть авторизация (наличие токена)
+        if (this.props.opt.state === "OPTMODE") {
+            //Получить состояние смены
+            this.props.getDataSmena();
+
+            //Сброс шагов (стадия оплаты топлива)
+            //this.props.clearStage();
+
+            //Запрос статуса корзины
             this.props.getCartFuel();
-        }.bind(this), 5000)
 
-        //Опрос доспуного оборудования для оплаты
-        let intervalId = setInterval(function () {
+            //Опрос доспуного оборудования для оплаты
             this.props.actionGetDataDeviceStatus();
-        }.bind(this), 3000);
-        this.setState({
-            intervalId: intervalId,
-        });
 
-        setTimeout(function() {
-            this.checkedStatusGadget();
-        }.bind(this), 5000)
+            //Запрос widget
+            this.props.getWidgetId('HomePage');
 
+            //Запрос ТРК на АЗС
+            this.props.actionGetFuelPumps(true);
+
+            //Запус проверки на доступность ТРК
+            let intervalCheckedGasStatus = setInterval(function () {
+                this.checkedGasStatus();
+            }.bind(this), 3000); //Данный интервал срабатывает при запуске
+            this.setState({
+                intervalCheckedGasStatus: intervalCheckedGasStatus,
+            });
+
+            this.checkDispState();
+        }
     }
 
     componentWillUnmount() {
         this.props.backHome(false);
-        clearInterval(this.state.intervalId)
+        //Отписка (прекращение stream checkedOptMode)
+        if (this.state.getSubscription) {
+            this.state.getSubscription.unsubscribe()
+        }
+        //Очистим store (результат работы метода payment) - нужно для повторной оплаты
+        this.props.clearPaymentInfo();
+        //Очищение в store корзины
+        this.props.clearCartStore();
+        clearInterval(this.state.intervalCheckedGasStatus);
+        //Очищение в store widget
+        this.props.getWidgetClear();
     }
 
     //Данная функция проверяет статус "Проверка режима работы" (если OPTMODE не приходит от api - значит делаем запрос повторно пока не получим ответ OPTMODE)
     checkedOptMode() {
         this.props.actionOpt();
-        const stream$ = interval(1000)
+        const stream$ = interval(5000)
             .pipe(
                 takeWhile(v => this.props.opt.state !== "OPTMODE") //takeWhile - это условие по которому вызываеться стрим
             )
         //Данный стрим будет выполняться пока не сработает takeWhile
-        stream$.subscribe({
+        const subscription = stream$.subscribe({
             next: v => this.props.actionOpt()
         })
-
-        this.checkDispState();
+        this.setState({
+            getSubscription: subscription
+        })
     }
 
     checkDispState() {
@@ -89,12 +121,6 @@ class HomePage extends Component {
         //Если вернулись назад и колонку которую выбрали ранее нужно вывести из режима налива (потому что оплата)
         if (this.props.numberSelectGas) {
             this.props.unlockGas(this.props.numberSelectGas)
-        }
-
-        //Если в корзине есть объект items - значит в корзине есть товар
-        if (this.props.infoCart.items) {
-            this.props.clearPayment(this.props.widgetId);
-            this.props.actionClearCart();
         }
     }
 
@@ -106,170 +132,139 @@ class HomePage extends Component {
         })
     }
 
-    //Кнопка Заправка
-    handleGetFuel = () => {
+    //Кнопка Информация
+    selectInfo = () => {
         this.setState({
-            selectGas: true
+            selectInfo: true
         })
     }
 
     //Функция которая отрисовывает контент
-    renderHomePage() {
-        if (this.state.selectGas) {
-            return <Redirect to="/stationPage"/>
+    renderHomePage = () => {
+        if (this.state.selectInfo) {
+            return <Redirect to="/informationPage" />
         }
         if (this.state.checkedMessages && this.props.messages) {
             alert(JSON.stringify(this.props.messages.messages, "", 4));
         }
-        if (this.props.opt.state === "OPTMODE" && this.props.infoCart.status !== "PRN") {
-            if (this.props.infoCart.status === "NONE" || this.props.infoCart.status === "VIEW" || this.props.infoCart.length === 0) { //Про статусы написано в задаче ТСО-719
+        if (this.props.opt.state === "OPTMODE" && this.props.IsCartEnabled) {
+            //Про статусы написано в задаче ТСО-719
+            if (this.props.isOpenSmena) {
                 return (
                     <>
                         <div className="homePage__section-action">
-                            <button
-                                className="homePage__button-menu"
-                                disabled={this.state.statusGadgetPayError ? "disabled" : ""}
-                                onClick={this.handleGetFuel}
-                            >
-                                <div className="homePage__action homePage__action_fuel">
-                                    <img src={"./images/trkgreen.svg"} className="homePage__icon" alt="trk" />
-                                    <div className="homePage__back">
-                                        Заправка
-                                    </div>
-                                </div>
-                            </button>
-                            <button className="homePage__button-menu">
-                                <Link to="/findCheckPage" className="link__wrapper">
-                                    <div className="homePage__action homePage__action_check">
-                                        <img src={"./images/checkgreen.svg"} className="homePage__icon" alt="trk" />
-                                        <div className="homePage__back">
-                                            Возврат
-                                        </div>
-                                    </div>
-                                </Link>
-                            </button>
+                            <BtnHomePage btnText="Заправка" type="fuelGas" isEnable={this.props.enabledGadgetPay && !this.state.allGasNotWork} allGasNotWork={this.state.allGasNotWork} />
+                            <BtnHomePage btnText="Возврат" type="Return" isEnable={true} />
                         </div>
-                        <button className="homePage__button-menu">
-                            <Link to="/informationPage" className="link__wrapper">
-                                <div className="homePage__action-information">
-                                    Информация
-                                </div>
-                            </Link>
-                        </button>
+                        <div className="homePage__action-information" onClick={this.selectInfo}>
+                            Информация
+                        </div>
                     </>
                 )
             } else {
-                return <Preloader />
+                //Если смена закрыта
+                return (
+                    <>
+                        <div className="homePage__smenidiv">
+                            <div className="homePage__smeniClose">
+                                <p>Внимание! </p>
+                                <p>Терминал временно не работает</p>
+                            </div>
+                        </div>
+                        <div className="homePage__action-information" onClick={this.selectInfo}>
+                            Информация
+                        </div>
+                    </>
+                )
             }
         } else {
             return <Preloader />
         }
     }
 
-    //Проверка статуса корзины
-    getStatusCart = () => {
-        //Если вернулись на главный экран по нажатию на кнопку Домой
-        if (this.props.backHomeStatus) {
-            //В состоянии FILL,то надо проверить ключ Items, если массив содержит хоть один элемент,то корзина не пуста
-            if (this.props.infoCart.status === "FILL" && this.props.infoCart.items.length) {
-                this.props.actionClearCart();
-            }
-            //если корзина status в состоянии PAY, ERR
-            if (this.props.infoCart.status === "PAY" || this.props.infoCart.status === "ERR") {
-                this.props.getWidgetId();
-            }
-            //если Type находится в состоянии PAYMENT, тогда, мы должны отменить
-            if (this.props.widgetId.type === "PAYMENT") {
-                this.props.clearPayment(this.props.widgetId.id);
-                this.props.actionClearCart();
+    //Проверка на доступность терминала
+    renderError = () => {
+        if (this.props.dataSmenaSuccess != null && !this.props.dataSmenaSuccess.isClose) {
+            //Если устройства для оплаты не доступны
+            if (this.props.statusDevice && this.props.enabledGadgetPay === false) {
+                return (
+                    <div className="homePage__errorStatus">
+                        <p>Внимание!</p>
+                        <p>Заказ топлива временно не доступен</p>
+                    </div>
+                )
             }
             if (this.props.widgetId.type !== "PAYMENT" && this.props.infoCart.length) {
                 return (
-                    <div className="homePage__message">
-                        Терминал не работает
+                    <div className="homePage__errorStatus">
+                        <p>Терминал не работает!</p>
                     </div>
                 )
             }
             if (this.props.infoCart.status === "RET" && this.props.infoCart.length) {
                 return (
-                    <div className="homePage__message">
-                        Терминал не работает
+                    <div className="homePage__errorStatus">
+                        <p>Терминал не работает!</p>
                     </div>
                 )
             }
-            if (this.props.infoCart.status === "PRN") {
-                this.props.getWidgetId();
+            if (this.state.allGasNotWork) {
+                return (
+                    <div className="homePage__errorStatus">
+                        <p>Внимание!</p>
+                        <p>Заказ топлива временно не доступен</p>
+                    </div>
+                )
             }
         }
     }
 
-    //Проверка статуса оборудования
-    checkedStatusGadget = () => {
-        if (this.props.statusDevice) {
-            for (let i = 0; i < this.props.statusDevice.length; i++) {
-                if (this.props.statusDevice[i].type === "CASH" && this.props.statusDevice[i].isEnable === false) {
+    //Проверка доступных колонок
+    checkedGasStatus = () => {
+        let arrGasDisabled = [];
+        if (this.props.FuelPumps.pumps) {
+            // eslint-disable-next-line array-callback-return
+            this.props.FuelPumps.pumps.map((item, index) => {
+                //Статус колонки Не работает
+                if (item.status === 'None' || item.status === 'Error' || item.status === 'Close') {
+                    console.log('Статус Не работает')
+                    arrGasDisabled.push(item)
                     this.setState({
-                        cashDisabled: true
+                        arrGasDisabled: arrGasDisabled
                     })
                 } else {
-                    this.setState({
-                        cashDisabled: false
-                    })
+                    arrGasDisabled.slice(index, 1)
                 }
-                if (this.props.statusDevice[i].type === "FLEET" && this.props.statusDevice[i].isEnable === false) {
-                    this.setState({
-                        fuelCardDisabled: true
-                    })
+                //Статус колонки Занята
+                if (item.posOwner !== 0 || item.typeConfig !== "PREAUTH") {
+                    console.log('Статус Занята')
+                    arrGasDisabled.push(item)
                 } else {
-                    this.setState({
-                        fuelCardDisabled: false
-                    })
+                    arrGasDisabled.slice(index, 1)
                 }
-                if (this.props.statusDevice[i].type === "BANK" && this.props.statusDevice[i].isEnable === false) {
-                    this.setState({
-                        bankCardDisabled: true
-                    })
-                } else {
-                    this.setState({
-                        bankCardDisabled: false
-                    })
-                }
+            })
+            //Если количество недоступных ТРК равно общему количеству ТРК на АЗС
+            if (arrGasDisabled.length >= this.props.FuelPumps.pumps.length) {
+                this.setState({
+                    allGasNotWork: true
+                })
+            } else {
+                this.setState({
+                    allGasNotWork: false
+                })
             }
         }
-        //Если не один метод оплаты не доступен
-        if (this.state.cashDisabled && this.state.fuelCardDisabled && this.state.bankCardDisabled) {
-            this.setState({
-                statusGadgetPayError: true
-            })
-        } else {
-            this.setState({
-                statusGadgetPayError: false
-            })
-        }
     }
-/*
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.statusGadgetPayError !== nextState.statusGadgetPayError) {
-            return true;
-        }
-        if (this.props.infoCart !== nextProps.infoCart) {
-            return true;
-        }
-        return false;
-    }*/
 
     render() {
         return (
             <>
+                {this.props.opt.state === "OPTMODE" ? <ComponentWaiting/> : null}
                 <button className="waves-effect waves-light btn btn-message" onClick={this.checkDataMessages}>
                     Проверка
                 </button>
                 <div className="homePage__wrapper">
-                    <div className={this.state.statusGadgetPayError ? "homePage__errorStatusGadget visible" : "homePage__errorStatusGadget "}>
-                        <p>Внимание!</p>
-                        <p>Заказ топлива временно не доступен</p>
-                    </div>
-                    {this.getStatusCart()}
+                    {this.renderError()}
                     {this.renderHomePage()}
                 </div>
             </>
@@ -277,33 +272,39 @@ class HomePage extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        opt: state.OptModeReducer.optMode,
-        widgetId: state.PayOrderReducer.widgetId,
-        numberSelectGas: state.FuelPumpsReducer.numberSelectGas,
-        infoCart: state.PayOrderReducer.cart,
-        backHomeStatus: state.BackHomeReducer.backHome,
-        messages: state.StatusDeviceReducer.messages,
-        statusDevice: state.StatusDeviceReducer.statusDevice,
-    }
-}
+const mapStateToProps = (state) => ({
+    opt: state.OptModeReducer.optMode,
+    widgetId: state.PayOrderReducer.widgetId,
+    numberSelectGas: state.FuelPumpsReducer.numberSelectGas,
+    infoCart: state.PayOrderReducer.cart,
+    backHomeStatus: state.BackHomeReducer.backHome,
+    messages: state.StatusDeviceReducer.messages,
+    enabledGadgetPay: state.StatusDeviceReducer.enabledGadgetPay,
+    statusDevice: state.StatusDeviceReducer.statusDevice,
+    FuelPumps: state.FuelPumpsReducer.fuelPumps,
+    dataSmenaSuccess: state.ReportReducer.dataSmenaSuccess,
+    isOpenSmena: state.ReportReducer.isOpenSmena,
+    IsCartEnabled: state.PayOrderReducer.IsCartEnabled,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        actionOpt: () => dispatch(getOpt()),
-        addLoginUser: () => dispatch(addLoginUser()),
-        actionClearCart: () => dispatch(actionClearCart()),
-        clearPayment: (payload) => dispatch(clearPayment(payload)),
-        getWidgetClear: () => dispatch(getWidgetClear()),
-        actionClearDataOrder: () => dispatch(clearOrderData()),
-        unlockGas: (payload) => dispatch(unlockGas(payload)),
-        getCartFuel: () => dispatch(getCartFuel()),
-        getWidgetId: () => dispatch(getWidgetId()),
-        backHome: (payload) => dispatch(backHome(payload)),
-        getDataMessages: () => dispatch(getDataMessages()),
-        actionGetDataDeviceStatus: () => dispatch(getDataDeviceStatus()),
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getDataSmena: () => dispatch(getDataSmena()),
+    actionOpt: () => dispatch(getOpt()),
+    addLoginUser: () => dispatch(addLoginUser()),
+    actionClearCart: () => dispatch(actionClearCart()),
+    clearPayment: (payload) => dispatch(clearPayment(payload)),
+    getWidgetClear: () => dispatch(getWidgetClear()),
+    actionClearDataOrder: () => dispatch(clearOrderData()),
+    unlockGas: (payload) => dispatch(unlockGas(payload)),
+    getCartFuel: (typePage) => dispatch(getCartFuel(typePage)),
+    getWidgetId: (typePage) => dispatch(getWidgetId(typePage)),
+    backHome: (payload) => dispatch(backHome(payload)),
+    getDataMessages: () => dispatch(getDataMessages()),
+    actionGetDataDeviceStatus: () => dispatch(getDataDeviceStatus()),
+    clearCartStore: () => dispatch(clearCartStore()),
+    clearPaymentInfo: () => dispatch(clearPaymentInfo()),
+    stageActive: (payload) => dispatch(stageActive(payload)),
+    actionGetFuelPumps: (payload) => dispatch(getFuelPumps(payload)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -1,19 +1,16 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import {getDataMessages} from "../../actions/actionsStatusDevice";
-import {getDataSmena, setCloseSmena} from "../../actions/actionsReports";
+import { getDataMessages } from "../../actions/actionsStatusDevice";
+import { getDataSmena, setCloseSmena } from "../../actions/actionsReports";
 import './Smeni.scss';
 
 class Smeni extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            numberSmena: null,
-            openSmena: false,
-            closeSmena: false
-        }
+    state = {
+        numberSmena: null,
+        openSmena: false,
+        closeSmena: false
     }
 
     componentDidMount() {
@@ -23,8 +20,11 @@ class Smeni extends Component {
 
     //Вывод ошибок
     renderError = () => {
-        if (this.props.messages) {
-            return (
+        if (this.props.messages && this.props.messages.messages) {
+            if (this.props.messages.messages.length > 0) {
+                return <Redirect to="/informationPage/technicalServicePage/smenimessage" />
+            }
+            /* return (
                 this.props.messages.messages.map((item, index) => {
                     return (
                         <div key={index}>
@@ -33,7 +33,7 @@ class Smeni extends Component {
 
                     )
                 })
-            )
+            ) */
         }
     }
 
@@ -70,7 +70,7 @@ class Smeni extends Component {
         if (this.state.closeSmena) {
             if (this.props.closeSmenaSuccess !== "200" || this.props.closeSmenaSuccess !== "202") {
                 status = "Произошла ошибка просьба обратиться в службу поддержки"
-            } else  {
+            } else {
                 status = "Смена закрыта успешно"
             }
         }
@@ -116,7 +116,7 @@ class Smeni extends Component {
 
     render() {
         if (this.state.openSmena) {
-            return <Redirect to="/informationPage/technicalServicePage/smeni/smenichange/"/>
+            return <Redirect to="/informationPage/technicalServicePage/smeni/smenichange/" />
         }
         return (
             <div className='Smeni__wrapper'>
@@ -137,20 +137,16 @@ class Smeni extends Component {
     }
 }
 
-function mapStateToProps (state) {
-    return {
-        messages: state.StatusDeviceReducer.messages,
-        dataSmenaSuccess: state.ReportReducer.dataSmenaSuccess,
-        closeSmenaSuccess: state.ReportReducer.closeSmenaSuccess,
-    }
-}
+const mapStateToProps = (state) => ({
+    messages: state.StatusDeviceReducer.messages,
+    dataSmenaSuccess: state.ReportReducer.dataSmenaSuccess,
+    closeSmenaSuccess: state.ReportReducer.closeSmenaSuccess,
+})
 
-function mapDispatchToProps (dispatch) {
-    return {
-        getDataMessages: () => dispatch(getDataMessages()),
-        getDataSmena: () => dispatch(getDataSmena()),
-        setCloseSmena: () => dispatch(setCloseSmena()),
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getDataMessages: () => dispatch(getDataMessages()),
+    getDataSmena: () => dispatch(getDataSmena()),
+    setCloseSmena: () => dispatch(setCloseSmena()),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Smeni);

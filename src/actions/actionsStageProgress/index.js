@@ -1,9 +1,7 @@
-import { STAGE_ACTIVE, STAGE_CLEAR } from "./actionsStageProgress"
+import { STAGE_ACTIVE } from "./actionsStageProgress"
 
-export const stageActive = (nameStage, payload) => ({type: STAGE_ACTIVE, nameStage: nameStage, payload: payload});
-export const clearStage = () => ({type: STAGE_CLEAR});
+export const stageActive = (payload) => ({ type: STAGE_ACTIVE, payload: payload });
 
 export default {
     stageActive,
-    clearStage
 }

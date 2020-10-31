@@ -15,7 +15,8 @@ import {
     OPEN_SMENA_FAILURE,
     CLOSE_SMENA_SUCCESS,
     CLOSE_SMENA_FAILURE,
-    CLEAR_ALL_REPORTS
+    CLEAR_ALL_REPORTS,
+    GET_IS_OPEN_SMENA
 } from '../actions/actionsReports/actionsReports';
 
 const initialState = {
@@ -41,6 +42,8 @@ const initialState = {
     //Закрыть смену
     closeSmenaSuccess: null,
     closeSmenaError: null,
+    //Состояние смены Открыта/Закрыта
+    isOpenSmena: false,
 }
 
 export default function ReportReducer(state = initialState, action) {
@@ -149,6 +152,12 @@ export default function ReportReducer(state = initialState, action) {
                 zReportError: null,
                 xReportError: null,
                 smenaReportError: null
+            };
+        //Состояние смены Открыта/Закрыта
+        case GET_IS_OPEN_SMENA:
+            return {
+                ...state,
+                isOpenSmena: action.payload
             };
         default:
             return state

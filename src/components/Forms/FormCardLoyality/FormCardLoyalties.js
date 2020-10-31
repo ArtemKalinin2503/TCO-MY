@@ -1,29 +1,38 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from 'react-router-dom';
 import KeyboardVirtual from "../../KeyboardVirtual/KeyboardVirtual";
-import { getLoyaltyCard } from "../../../actions/actionsCardLoyalties";
+import { clearLoyalty, getLoyaltyCard } from "../../../actions/actionsCardLoyalties";
+import Preloader from "../../Preloader/Preloader";
+import { stageActive } from "../../../actions/actionsStageProgress";
+
 import "./formCardLoyalties.scss";
-//RxJs
-import {interval} from "rxjs";
-import {takeWhile} from 'rxjs/operators';
 
 //Фррма для ввода данных карты Лояльности
 class FormCardLoyalties extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            numberCard: "",
-        }
+    state = {
+        numberCard: "",
     }
 
     componentDidMount() {
+        //Шаг стадия оплаты топлива
+        this.props.stageActive(this.props.typeCardReal ? "FormCardLoyalties_CardReal": "FormCardLoyalties_CardVirtual");
+
         //Выставим фокус на input Номер карты
         let inputNumberCard = document.getElementById('numberCard');
-        if(inputNumberCard) {
+        if (inputNumberCard) {
             inputNumberCard.focus()
         }
+        //Если выбрана пластиковая карта лояльности
+        if (this.props.typeCardReal) {
+            setTimeout(function () {
+                this.props.getLoyaltyCard(this.props.widgetId.id, this.state.numberCard)
+            }.bind(this), 5000)
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.clearLoyalty();
     }
 
     //Полуичм номер карты введенный пользователм
@@ -35,85 +44,74 @@ class FormCardLoyalties extends Component {
 
     //Кнопка Авторизировать
     handlerAuthorization = () => {
-        //this.checkedStatusCard();
         this.props.getLoyaltyCard(this.props.widgetId.id, this.state.numberCard)
     }
 
-    //Проверка авторизации карты Лояльности
- /*   checkedStatusCard = () => {
-        this.props.getLoyaltyCard(this.props.widgetId.id, this.state.numberCard)
-        const stream$ = interval(1000)
-            .pipe(
-                takeWhile(v => this.props.cardLoyaltiesData !== 202) //takeWhile - это условие по которому вызываеться стрим
-            )
-        //Данный стрим будет выполняться пока не сработает takeWhile
-        stream$.subscribe({
-            next: v => this.props.getLoyaltyCard(this.props.widgetId.id, this.state.numberCard)
-        })
-    }*/
+    //Основная разметка исходя как будет авторизовываться карта Лояльности
+    renderTypeCard = () => {
+        //Если номер карты нужно ввести через форму
+        if (this.props.typeCardVirtual) {
+            return (
+                <>
+                    <div className="formCardLoyalties__head">
+                        {"Отсканируйте QR-код или введите номер карты вручную"}
+                    </div>
+                    <div className="formCardLoyalties__information_qr" />
+                    <div className="formCardLoyalties__tet" />
 
-    renderFormCardLoyalties = () => {
-        return (
-            <>
-                <div className="formCardLoyalties__title">
-                    Приготовьте бонусную карту
-                </div>
-                <div className="formCardLoyalties__img-wrapper">
-                    <div className="formCardLoyalties__info tryCard">
-                        <p>Если у Вас физическая карта, <br/> следуйте инструкции на ПИН-паде</p>
-                    </div>
-                    <div className="formCardLoyalties__info virtualCard">
-                        <p>Если у Вас виртуальная карта, <br/> отсканируйте шрих-код</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="formCardLoyalties__keyboard-label">
-                        Или введите номер виртуальной карты
-                    </div>
-                    <div className="formCardLoyalties__keyboard-wrapper">
+                    <div className="formCardLoyalties__keyboard">
                         <KeyboardVirtual
                             activeComponent="formCardLoyalties"
                             getNumberCard={(numberCard) => this.getNumberCard(numberCard)}
                             type="OneInput"
                             keyboardType="number"
                         />
+                        <div className="formCardLoyalties__btnpay" onClick={this.handlerAuthorization}>
+                            <div className="formCardLoyalties__textbtn">Авторизовать</div>
+                        </div>
                     </div>
-                </div>
-                <div className="formCardLoyalties__btn-wrapper">
-                    <buttonb
-                        className="waves-effect waves-light btn #45b667 formCardLoyalties__btnNext"
-                        onClick={this.handlerAuthorization}
-                    >
-                        Авторизовать
-                    </buttonb>
-                </div>
-            </>
-        )
+                </>
+            )
+        }
+        //Если номер карты будет введен путем сканирования через ПинПад
+        else if (this.props.typeCardReal) {
+            return (
+                <>
+                    <div className="formCardLoyalties__head">
+                        {"Приготовьте бонусную карту и следуйте инструкции на ПИН-паде"}
+                    </div>
+                    <div className="formCardLoyalties__tet">
+                        <div className="pinPadCard__information" />
+                    </div>
+                </>
+            )
+        }
     }
 
     render() {
-        if (this.props.cardLoyaltiesData === 202) {
-            return <Redirect to="/stationPage/deductingPoints/"/>
+        if (this.props.loadingLoyalties) {
+            return (
+                <Preloader />
+            )
+        } else {
+            return (
+                <div className="formCardLoyalties__wrapper">
+                    {this.renderTypeCard()}
+                </div>
+            )
         }
-        return (
-            <div className="formCardLoyalties__wrapper">
-                {this.renderFormCardLoyalties()}
-            </div>
-        )
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        widgetId: state.PayOrderReducer.widgetId,
-        cardLoyaltiesData: state.LoyaltiesCardReducer.cardLoyaltiesData,
-    }
-}
+const mapStateToProps = (state) => ({
+    widgetId: state.PayOrderReducer.widgetId,
+    loadingLoyalties: state.LoyaltiesCardReducer.loadingLoyalties,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getLoyaltyCard: (widgetId, numberCard) => (dispatch(getLoyaltyCard(widgetId, numberCard)))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getLoyaltyCard: (widgetId, numberCard) => (dispatch(getLoyaltyCard(widgetId, numberCard))),
+    clearLoyalty: () => dispatch(clearLoyalty()),
+    stageActive: (payload) => dispatch(stageActive(payload)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormCardLoyalties);

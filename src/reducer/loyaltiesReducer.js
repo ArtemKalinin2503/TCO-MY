@@ -1,7 +1,7 @@
-import { GET_LOYALTY_STARTED, GET_LOYALTY_SUCCESS, GET_LOYALTY_ERROR } from "../actions/actionsCardLoyalties/actionsCardLoyalties";
+import { GET_LOYALTY_STARTED, GET_LOYALTY_SUCCESS, GET_LOYALTY_ERROR, CLEAR_LOYALTY } from "../actions/actionsCardLoyalties/actionsCardLoyalties";
 
 const initialState = {
-    cardLoyaltiesData: 0,
+    cardLoyaltiesData: "",
     loadingLoyalties: false,
     errorLoyalties: null
 }
@@ -25,6 +25,13 @@ export default function LoyaltiesCardReducer(state = initialState, action) {
                 ...state,
                 loadingLoyalties: false,
                 errorLoyalties: action.payload.error
+            }
+        case CLEAR_LOYALTY:
+            return {
+                ...state,
+                cardLoyaltiesData: "",
+                loadingLoyalties: false,
+                errorLoyalties: null
             }
         default:
             return state;

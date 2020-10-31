@@ -1,30 +1,46 @@
 .formDeductingPoints {
   &__wrapper {
     margin-top: 20px;
+    width: 650px;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     .keyboardVirtual {
       .input-keyboard {
         margin-right: 40px;
         padding-right: 60px;
       }
     }
+  }
 
-  }
-  &__info-wrapper {
-    font-size: 20px;
-    color: #9e9e9e;
-    padding-left: 10px;
-    width: 260px;
+  &__columngas {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    justify-content: center;
     margin-bottom: 20px;
-  }
-  &__info {
-    height: 50px;
-    background: #afaead;
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    width: 245px;
-    border-radius: 5px;
-    text-align: center;
+    width: 290px;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    &__text {
+      text-align: left;
+      margin-left: 15px;
+      font-family: "Open Sans Condensed";
+      font-weight: normal;
+      font-size: 40px;
+    }
+    &__info {
+      text-align: center;
+      font-family: "Open Sans Condensed";
+      font-weight: bold;
+      font-size: 49px;
+      min-height: 65px;
+      background: #afaead;
+      color: black;
+      margin-left: 10px;
+    }
   }
 }

@@ -1,62 +1,85 @@
-.cardLoyalties{
+.cardLoyalties {
   &__wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    .btn {
-      width: 100px;
-      height: 80px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 20px;
-      overflow: initial;
+    width: 100%;
+  }
+
+  &__head {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: "Open Sans Condensed";
+    font-weight: normal;
+    font-size: 49px;
+    margin-bottom: 20px;
+    max-width: 520px;
+    &.no-visible {
+      display: none;
     }
-    .btn-yes {
-      position: relative;
-      background: #45b667;
-      margin-right: 35px;
-      &:before {
-        content: "";
-        display: block;
-        background: url(/images/cardLoyal.svg) no-repeat;
-        width: 50px;
-        height: 30px;
-        background-size: contain;
-        position: absolute;
-        top: -12px;
-        border-radius: 4px;
-        left: 14px;
+  }
+  &__tet {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    &.no-visible {
+      display: none;
+    }
+  }
+}
+.btnCardLoyalty {
+  &__wrapper {
+    width: 198px;
+    height: 198px;
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-bottom: 35px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+    transition: opacity 0.3s, linear 0.2s;
+    box-shadow: 3px 3px #767676;
+
+    font-family: "Open Sans Condensed";
+    font-style: normal;
+
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    &:hover {
+      cursor: pointer;
+      &:active {
+        background: #767676;
       }
     }
-    .btn-no {
-      background: #d54082;
-    }
+    text-decoration: none;
   }
-  &__btn-wrapper {
-    display: flex;
-    &.no-visible {
-      display: none;
-    }
+  &__icon {
+    height: 100px;
+    margin-top: 5px;
   }
-  &__title {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 50px;
-    &.no-visible {
-      display: none;
-    }
+  &__text {
+    text-align: center;
+    font-size: 36px;
+    //margin-bottom: 10px;
+    color: #343434;
+    line-height: 43px;
   }
-  &__wrapper-form {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
+  &__textNo {
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 64px;
+    margin-top: 53px;
+    color: #343434;
+    text-decoration: none;
   }
 }

@@ -1,31 +1,42 @@
 .printCheck {
   &__wrapper {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 550px;
-    flex-wrap: wrap;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
   &__status {
-    width: 200px;
-    height: 0;
-    background: url(/images/checkWork.svg) no-repeat;
     display: none;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
     &.visible {
-      display: block;
-      width: 100%;
-      min-height: 550px;
-      background-position-x: 50%;
-      background-position-y: 130px;
-      background-size: 200px;
-      flex-wrap: wrap;
+      display: flex;
     }
   }
+  &__tet {
+    min-height: 70px;
+  }
   &__text {
-    font-size: 34px;
-    width: 100%;
     text-align: center;
-    margin: 0;
+    font-family: "Open Sans Condensed";
+    font-weight: normal;
+    font-size: 49px;
+    &.error {
+      color: #f7931e;
+    }
+  }
+  &__check {
+    margin-top: 100px;
+    height: 390px;
   }
 }

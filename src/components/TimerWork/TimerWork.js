@@ -42,6 +42,9 @@ class TimerWork extends Component {
             this.timer = setInterval(this.countDown, 1000);
         }
     }
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
 
     countDown() {
         // Remove one second, set state so a re-render happens.

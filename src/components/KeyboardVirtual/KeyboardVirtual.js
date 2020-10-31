@@ -7,10 +7,29 @@ function KeyboardVirtual(props) {
     const [inputs, setInputs] = useState({});
     const [layoutName, setLayoutName] = useState('default');
     const [inputName, setInputName] = useState("default");
+    const [inputPattern, setInputPattern] = useState("");
+    const [selectPresetOrderSum, setSelectPresetOrderSum] = useState(null);
+    const [selectPresetOrderLitres, setSelectPresetOrderLitres] = useState(null);
     const keyboard = useRef();
 
+    //Оброботчик события на кнопках присетах Сумма
+    const handlePresetSum = (e, item) => {
+        e.preventDefault();
+        setSelectPresetOrderSum(item)
+        props.selectLitres(item, 0)
+    }
+
+    //Оброботчик события на кнопках присетах Литры
+    const handlePresetLitres = (e, item) => {
+        console.log(item)
+        e.preventDefault();
+        setSelectPresetOrderLitres(item)
+        props.selectLitres(0, item)
+        setSelectPresetOrderSum(null);
+    }
+
     //Клик по каждой кнопке клавиатуры
-    const onChangeAll = inputs => {
+    const onChangeAll = (inputs) => {
         setInputs({...inputs});
         // console.log("Inputs changed", inputs);
 
@@ -22,6 +41,13 @@ function KeyboardVirtual(props) {
         if (props.activeComponent === "quantityFuel") {
             //Вызов функции которая получит данные введенные в поле Сумма и Литры
             props.selectLitres(inputs.sum, inputs.litres)
+
+            //Если были нгажаты кнопки присеты с суммой или литрамии
+            if (selectPresetOrderSum || selectPresetOrderLitres) {
+                setSelectPresetOrderSum(null);
+                setSelectPresetOrderLitres(null);
+            }
+
             //Если введено максимальна сумма заказа (ограничена api)
             if (props.maxMoney) {
                 keyboard.current.clearInput();
@@ -39,7 +65,7 @@ function KeyboardVirtual(props) {
         }
         if (props.activeComponent === "formDataCheck") {
             //Вызов функции которая получит данные введенные в поле Телефон и Email
-            props.getContact(inputs.phone, inputs.email)
+            props.getContact(inputs.email, inputs.phone)
         }
         if (props.activeComponent === "formDeductingPoints") {
             //Вызов функции которая получит данные введенные в поле Сумма баллов к списанию (карта Лояльности)
@@ -53,7 +79,6 @@ function KeyboardVirtual(props) {
             //Вызов функции которая получит Номер смены
             props.getNumberSmeny (inputs.numberSmeny)
         }
-
     };
 
     const handleShift = () => {
@@ -61,15 +86,19 @@ function KeyboardVirtual(props) {
         setLayoutName(newLayoutName);
     };
 
+    //События на кнопках исходя из условий
     const onKeyPress = button => {
         if (button === "{shift}" || button === "{lock}") handleShift();
-        //if (button === "{bksp}") handleClear();
+        if (button === "{bksp}") handleClear();
     };
 
-   /* const handleClear = () => {
-        console.log('кнопка стереть');
-        keyboard.current.clearInput();
-    }*/
+   //Кнопка Стереть
+   const handleClear = () => {
+       console.log('кнопка стереть');
+       setSelectPresetOrderSum(null);
+       setSelectPresetOrderLitres(null);
+       keyboard.current.clearInput();
+    }
 
     const onChangeInput = event => {
         const inputVal = event.target.value;
@@ -167,10 +196,34 @@ function KeyboardVirtual(props) {
                 keyboard.current.clearInput('sum');
                 keyboard.current.clearInput('litres');
             }
+
+            //Валидация телефона (при выборе поля телефон нельзя нажимать буквы)
+            if (changeInput === "phone") {
+                setInputPattern(/^\d+$/);
+            } else {
+                setInputPattern("");
+            }
         }
 
         //Так как есть компоненты где нужна клавиатура с одинм input, а иногда с двумя input
         function renderForm() {
+            //Логика для кнопок присетов (Сумма и Литры)
+            let actionValueOneProps;
+            let actionValueTwoProps;
+            //Если были выбраны присеты сумма
+            if (selectPresetOrderSum) {
+                actionValueOneProps = selectPresetOrderSum
+                actionValueTwoProps = actionValueTwo
+            }
+            //Если были выбраны присеты Литры
+            else if (selectPresetOrderLitres) {
+                actionValueOneProps = actionValueOne
+                actionValueTwoProps = selectPresetOrderLitres
+            } else {
+                actionValueOneProps = actionValueOne;
+                actionValueTwoProps = actionValueTwo
+            }
+
             if (formType === "OneInput") {
                 return (
                     <form className="col s12" autoComplete="off">
@@ -200,24 +253,58 @@ function KeyboardVirtual(props) {
                                 <input id={changeInputOne}
                                        type="text"
                                        className="validate"
-                                       value={actionValueOne || ''}
+                                       value={actionValueOneProps || ''}
                                        onFocus={() => handleFocus(changeInputOne)}
                                        onChange={onChangeInput}
                                        autoComplete="off"
                                        disabled={disabled}
                                 />
+                                {/*Присеты Сумма*/}
+                                <div className="preset__wrapper">
+                                {props.presetSum ?
+                                    props.presetSum.map((item, index) => {
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={(e) => handlePresetSum(e, item)}
+                                                className="btn preset preset_sum"
+                                            >
+                                                {item}
+                                                <span className="preset-text preset-text_rub"> &#8381;</span>
+                                            </button>
+                                        )
+                                    }) : null
+                                }
+                                </div>
                             </div>
                             <div className="input-keyboard col s12">
                                 <label htmlFor={changeInputTwo}>{inputNameTwo}</label>
                                 <input id={changeInputTwo}
                                        type="text"
                                        className="validate"
-                                       value={actionValueTwo || ''}
+                                       value={actionValueTwoProps || ''}
                                        onFocus={() => handleFocus(changeInputTwo)}
                                        onChange={onChangeInput}
                                        autoComplete="off"
                                        disabled={disabled}
                                 />
+                                {/*Присеты Литры*/}
+                                <div className="preset__wrapper">
+                                    {props.presetLitres ?
+                                        props.presetLitres.map((item, index) => {
+                                            return (
+                                                <button
+                                                    key={index}
+                                                    onClick={(e) => handlePresetLitres(e, item)}
+                                                    className="btn preset preset_litres"
+                                                >
+                                                    {item}
+                                                    <span className="preset-text preset-text_litres"> Л</span>
+                                                </button>
+                                            )
+                                        }) : null
+                                    }
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -264,6 +351,7 @@ function KeyboardVirtual(props) {
                 layoutName={layoutName}
                 onChangeAll={onChangeAll}
                 onKeyPress={onKeyPress}
+                inputPattern={inputPattern}
                 //Здесь переименовываем кнопки
                 display={{
                     '{bksp}': '<<',

@@ -4,12 +4,9 @@ import './ReportPrint.scss'
 
 class ReportPrint extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            interval: 0,
-            printApproved: false
-        }
+    state = {
+        interval: 0,
+        printApproved: false
     }
 
     componentDidMount() {

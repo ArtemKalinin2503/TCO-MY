@@ -7,18 +7,25 @@ import {
     GET_WIDGET_SUCCESS,
     GET_WIDGET_ERROR,
     GET_PAYMENT,
+    CLEAR_PAYMENT_INFO,
     PAYMENT_CHOOSE_PAY,
     PAYMENT_PAY_STARTED,
     PAYMENT_PAY_SUCCESS,
     PAYMENT_PAY_ERROR,
+    PAYMENT_PAY_CLEAR,
     PAYMENT_FINISH_STARTED,
     PAYMENT_FINISH_SUCCESS,
     PAYMENT_FINISH_ERROR,
     CLEAR_CART,
+    CLEAR_CART_STORE,
     GET_CART,
+    GET_CART_ERROR,
     GET_WIDGET_CLEAR,
     GET_EMAIL_CHECK,
-    GET_PHONE_CHECK
+    GET_PHONE_CHECK,
+    GET_PAYMENT_STATUS,
+    GET_PAYMENT_STATUS_ERROR,
+    GET_IS_CARD_ENABLED
 } from "../actions/actionsPayOrder/actionsPayOrder";
 
 const initialState = {
@@ -29,7 +36,7 @@ const initialState = {
     responsePayment: null,
     errorPayment: null,
     //id сессии оплаты
-    widgetId: 0,
+    widgetId: {},
     isLoadedWidget: false,
     errorWidget: null,
     //Запускает этап оплаты
@@ -47,17 +54,23 @@ const initialState = {
     statusCart: null,
     //Содержание корзины
     cart: [],
+    cartError: null,
     //Данные для отправки чека
     emailCheck: "",
-    phoneCheck: ""
+    phoneCheck: "",
+    //Данные о ошибке если оплата не прошла
+    paymentStatus: {},
+    paymentStatusError: null,
+    //Получено ли разрешение на переход с главной страницы по катре
+    IsCartEnabled: false
 }
 
 export default function PayOrderReducer(state = initialState, action) {
     switch (action.type) {
         case START_NEW_TRANSACTION:
             return {
-              ...state,
-              responseNewTransaction: action.payload
+                ...state,
+                responseNewTransaction: action.payload
             };
         case START_NEW_TRANSACTION_ERROR:
             return {
@@ -80,7 +93,6 @@ export default function PayOrderReducer(state = initialState, action) {
                 isLoadedWidget: true
             };
         case GET_WIDGET_SUCCESS:
-            console.log(action.payload)
             return {
                 ...state,
                 widgetId: action.payload,
@@ -95,7 +107,7 @@ export default function PayOrderReducer(state = initialState, action) {
         case GET_WIDGET_CLEAR:
             return {
                 ...state,
-                widgetId: 0
+                widgetId: {}
             }
         case GET_PAYMENT:
             let infoPay = action.payload;
@@ -110,8 +122,13 @@ export default function PayOrderReducer(state = initialState, action) {
                 paymentInfo: action.payload,
                 payStatus: checkedPay
             }
+        case CLEAR_PAYMENT_INFO:
+            return {
+                ...state,
+                paymentInfo: []
+            }
         case PAYMENT_CHOOSE_PAY:
-            return  {
+            return {
                 ...state,
                 responseChoosePay: action.payload
             }
@@ -132,6 +149,13 @@ export default function PayOrderReducer(state = initialState, action) {
                 errorPay: action.payload.error,
                 isLoadedPay: false
             };
+        case PAYMENT_PAY_CLEAR:
+            return {
+                ...state,
+                isLoadedPay: false,
+                responsePay: "",
+                errorPay: null
+            }
         case PAYMENT_FINISH_STARTED:
             return {
                 ...state,
@@ -154,11 +178,22 @@ export default function PayOrderReducer(state = initialState, action) {
                 ...state,
                 statusCart: action.payload
             };
+        case CLEAR_CART_STORE:
+            return {
+                ...state,
+                cart: [],
+                cartError: null
+            }
         case GET_CART:
             return {
                 ...state,
                 cart: action.payload
             };
+        case GET_CART_ERROR:
+            return {
+                ...state,
+                cartError: action.payload.error
+            }
         case GET_EMAIL_CHECK:
             return {
                 ...state,
@@ -166,8 +201,23 @@ export default function PayOrderReducer(state = initialState, action) {
             };
         case GET_PHONE_CHECK:
             return {
-              ...state,
-              phoneCheck: action.payload
+                ...state,
+                phoneCheck: action.payload
+            };
+        case GET_PAYMENT_STATUS:
+            return {
+                ...state,
+                paymentStatus: action.payload
+            }
+        case GET_PAYMENT_STATUS_ERROR:
+            return {
+                ...state,
+                paymentStatusError: action.payload.error,
+            };
+        case GET_IS_CARD_ENABLED:
+            return {
+                ...state,
+                IsCartEnabled: action.payload,
             };
         default:
             return state

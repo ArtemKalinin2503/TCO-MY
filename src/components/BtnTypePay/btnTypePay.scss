@@ -1,4 +1,13 @@
 .btnTypePay {
+  &__wrapper {
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+    &.inVisibleTypePay {
+      display: none;
+    }
+  }
   &__item {
     display: none;
     margin-right: 20px;
@@ -16,58 +25,51 @@
   }
 }
 
-.btnTypePay {
-  position: relative;
-  width: 130px;
-  height: 110px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  font-size: 18px;
-  overflow: initial;
-  background: none;
-  line-height: 20px;
-  padding-top: 54px;
-  margin-right: 35px;
-  &:last-child {
-    margin-right: 0;
+.btnTypePayDiv {
+  &__wrapper {
+    width: 198px;
+    height: 198px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 10px;
+    box-shadow: 3px 3px #767676;
+    padding: 3px;
+    &:active {
+      background: #767676;
+    }
   }
-}
-.btn-bank-card {
-  &:before {
-    content: "";
-    display: block;
-    background: url(/images/creditCard.svg) no-repeat;
-    width: 72px;
-    height: 58px;
-    position: absolute;
-    background-size: contain;
-    top: 5px;
+  &__icon {
+    width: 100%;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &__btn-fuel-card {
+      width: 122px;
+      height: 80px;
+    }
+    &__btn-bank-card {
+      width: 126px;
+      height: 85px;
+    }
+    &__btn-cash {
+      width: 152px;
+      height: 74px;
+    }
   }
-}
-.btn-fuel-card {
-  &:before {
-    content: "";
-    display: block;
-    background: url(/images/fuelCard.svg) no-repeat;
-    width: 62px;
-    height: 50px;
-    position: absolute;
-    background-size: contain;
-    top: 13px;
-  }
-}
-.btn-cash {
-  &:before {
-    content: "";
-    display: block;
-    width: 75px;
-    height: 60px;
-    position: absolute;
-    top: -2px;
-    background: url(/images/btnTurnBack.png) no-repeat;
-    background-size: 74px;
+  &__text {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin-top: 18px;
+    font-family: "Open Sans Condensed";
+    font-style: normal;
+    font-size: 36px;
+    color: #343434;
+    line-height: 44px;
   }
 }

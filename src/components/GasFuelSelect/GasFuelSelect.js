@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getFuelPumps, lockGas, getNumberGas } from "../../actions/actionsFuelPumps";
 import { stageActive } from "../../actions/actionsStageProgress";
@@ -8,38 +8,32 @@ import Preloader from "../Preloader/Preloader";
 import "./gasFuelSelect.scss"
 
 //Компонент Выбора Топлива на колонке
-class GasFuelSelect extends Component{
+class GasFuelSelect extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            intervalId: 0,
-            renderPistol: 0
-        }
+    state = {
+        intervalId: 0,
+        renderPistol: 0
     }
 
     componentDidMount() {
-        const {numberGas} = this.props.match.params;
+        //Шаг стадия оплаты топлива
+        this.props.stageActive("GasFuelSelect");
+
+        const { numberGas } = this.props.match.params;
         //Для получения данных о статусе колонок (нужно все время опрашивать api)
         let intervalId = setInterval(function () {
-            this.props.actionGetFuelPumps(false);
+            this.props.actionGetFuelPumps(true);
         }.bind(this), 3000);
 
         this.setState({
             intervalId: intervalId,
         });
 
-        //Для компонента GasStage - активныя стадия
-        this.props.actionStageActive("selectFuel", true);
-        this.props.actionStageActive("card", false);
-
         //Для блокировки колонки после того как выбрали колонку
         this.props.lockGas(numberGas);
 
         //Запишем номер выбранной колонки в store
         this.props.getNumberGas(numberGas);
-
-
     }
 
     //Очищение interval - после удаления данного компонента
@@ -48,37 +42,50 @@ class GasFuelSelect extends Component{
     }
 
     //Метод который проверяет данные - если они не изменились то не производить render компонента повторно
-   /* shouldComponentUpdate(nextProps, nextState) {
-        // eslint-disable-next-line no-self-compare
-        return this.props.FuelPumps !== this.props.FuelPumps
-    }*/
+     shouldComponentUpdate(nextProps, nextState) {
+         if (this.props.FuelPumps.pumps !== nextProps.FuelPumps.pumps) {
+             return true;
+         }
+         return false;
+     }
 
     //Получим номер выбранной колонки и название топлива
     handlerGetFuelOrder = (nameFuel) => {
-        const {numberGas} = this.props.match.params;
+        const { numberGas } = this.props.match.params;
         this.props.getSelectDataFuel(numberGas, nameFuel);
     }
 
+    //Проверка на поднятый пистолет
     checkedUpPistol = () => {
-        const {numberGas} = this.props.match.params;
-        let numberGasParam = Number(numberGas);
-        let selectArr = null;
-        if (this.props.FuelPumps.grades) {
-            if (numberGasParam === this.props.numberGasPistolUp) {
-                selectArr = this.props.filterFuelPumps.grades
-            } else {
-                selectArr = this.props.FuelPumps.grades
-            }
-        }
+        const { numberGas } = this.props.match.params;
+        let numberGasNumber= Number( numberGas );
+        let selectArr = this.props.FuelPumps.grades;
+        //Массив с данными о колонке где поднят пистолет
+        this.props.arrGasPistolUp.map((item) => {
+            //Данные о пистолетах в отдельном массиве nozzles
+            item.nozzles.map((itemNozzle) => {
+                //Если номер поднятого пистолета равен номеру пистолета в массиве nozzles
+                if (item.nozzleNumber === itemNozzle.number) {
+                    this.props.FuelPumps.grades.map((itemGrades) => {
+                        //Если id из массива топлива равен gradeId пистолета который поднят и номер выбраной колокни совпали с параметром number (данный параметр это номер колонки)
+                        if (itemGrades.id === itemNozzle.gradeId && item.number === numberGasNumber) {
+                            //console.log(itemGrades);
+                            selectArr = itemGrades;
+                        }
+                    })
+                }
+            })
+        })
+
         return selectArr
     }
 
-    renderGrades() {
-        console.log('renderGrades')
-        if (this.props.FuelPumps.grades) {
-            const {numberGas} = this.props.match.params; //Получим номер выбраной колонки из url
+    //Вывод топлива (так как если пистолет не снят на ТРК, приходит массив, а если снят то объект)
+    renderFuelItem = (pistolArr) => {
+        const { numberGas } = this.props.match.params;
+        if (pistolArr.length) {
             return (
-                this.checkedUpPistol().map((item) => {
+                pistolArr.map((item) => {
                     return (
                         <FuelItem
                             key={item.id}
@@ -96,8 +103,37 @@ class GasFuelSelect extends Component{
                 })
             )
         } else {
+           return (
+               <FuelItem
+                   key={pistolArr.id}
+                   numberGas={numberGas}
+                   fuelId={pistolArr.id}
+                   fuelName={pistolArr.fuelName}
+                   fuelPrice={pistolArr.price}
+                   fuelColor={pistolArr.color}
+                   disabled={pistolArr.isDisabled}
+                   selectFuel={(nameFuel) => this.handlerGetFuelOrder(nameFuel)}
+                   pistolUp={pistolArr.pistolUp}
+                   numberGasPistolUp={pistolArr.numberGasPistolUp}
+               />
+           )
+        }
+    }
+
+    renderGrades() {
+        this.checkedUpPistol();
+        if (this.props.FuelPumps.grades) {
             return (
-                <Preloader/>
+                <div>
+                    <div className="gasFuelSelect__head">Выберите вид топлива</div>
+                    <div className="gasFuelSelect__fuels">
+                        {this.renderFuelItem(this.checkedUpPistol())}
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <Preloader />
             )
         }
     }
@@ -111,22 +147,18 @@ class GasFuelSelect extends Component{
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        FuelPumps: state.FuelPumpsReducer.fuelPumps,
-        filterFuelPumps: state.FuelPumpsReducer.filterFuelPumps,
-        numberGasPistolUp: state.FuelPumpsReducer.numberGasPistolUp,
-    }
-}
+const mapStateToProps = (state) => ({
+    FuelPumps: state.FuelPumpsReducer.fuelPumps,
+    arrGasPistolUp: state.FuelPumpsReducer.arrGasPistolUp,
+    numberGasPistolUp: state.FuelPumpsReducer.numberGasPistolUp,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        actionGetFuelPumps: (payload) => dispatch(getFuelPumps(payload)),
-        actionStageActive: (nameStage, payload) => dispatch(stageActive(nameStage, payload)),
-        getSelectDataFuel: (numberGas, nameFuel) => dispatch(getSelectDataFuel(numberGas, nameFuel)),
-        lockGas: (numberGas) => dispatch(lockGas(numberGas)),
-        getNumberGas: (paylaod) => dispatch(getNumberGas(paylaod))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    actionGetFuelPumps: (payload) => dispatch(getFuelPumps(payload)),
+    stageActive: (payload) => dispatch(stageActive(payload)),
+    getSelectDataFuel: (numberGas, nameFuel) => dispatch(getSelectDataFuel(numberGas, nameFuel)),
+    lockGas: (numberGas) => dispatch(lockGas(numberGas)),
+    getNumberGas: (payload) => dispatch(getNumberGas(payload))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(GasFuelSelect)

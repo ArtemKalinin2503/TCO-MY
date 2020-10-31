@@ -1,0 +1,120 @@
+@import "../Pages/TechnicalServicePage/properties";
+
+.SmeniMessage {
+  &__messages-error {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  &__error-status {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+  }
+  &__wrapper {
+    background-color: #f1f1f1;
+    width: 100%;
+    display: flex;
+    .SmeniMessage {
+      font-family: RobotoCondensed, Arial;
+      color: #4e4d4d;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: $TechnicalServicePageWidth;
+
+      a {
+        color: #4e4d4d;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 41px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h3 {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h4 {
+        text-align: center;
+        font-size: 34px;
+        font-weight: 400;
+        margin: 5px 0;
+      }
+      h5 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 400;
+        margin: 5px 0;
+        color: red;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        margin: 38px 15px;
+      }
+    }
+  }
+  .btn-report {
+    width: 200px;
+    height: 200px;
+    font-size: 26px;
+    margin-right: 20px;
+    &_open {
+      background-color: #24a94c;
+    }
+    &_close {
+      background-color: #f44336;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+   &__table_message {
+    margin-top: 170px;
+  }
+  &__textmessage {
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: red;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 2px solid black;
+    min-height: 40px;
+  }
+  &__textmessageanswer {
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: blue;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    //border: 2px solid black;
+    min-height: 40px;
+  }
+  &__divbutton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    //min-height: 40px;
+  }
+}
+
+.smena__date {
+  text-align: center;
+  font-size: 20px;
+}
+

@@ -13,6 +13,7 @@ export const getOpt = () => {
         dispatch(getOptStarted());
         axios
             .get(`${urlApi}/api-v01/widget/mode`, {
+                timeout: 3000,
                 params: {
                     refresh: true
                 }

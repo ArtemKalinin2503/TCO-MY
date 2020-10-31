@@ -74,12 +74,11 @@ export const waitFindCheck = () => {
                     if (res.status === 200) {
                         if (res.data && res.data.lines && res.data.lines.length === 1) {
                             let id = res.data.lines[0].id;
-                            //console.log('waitFindCheck: ', id);
                             dispatch(notifyFindCheckScanned(id));
                             return;
                         }
                     }
-                    dispatch(notifyFindCheckWaitError(res.status));
+                    dispatch(notifyFindCheckSearchError(res.status));
                 }
             })
             .catch(err => {

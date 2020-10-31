@@ -27,13 +27,10 @@ const initialState = {
 export default function FindCheckReducer (state = initialState, action) {
     switch (action.type) {
         case FINDCHECK_RESET:
-            console.log('+++> FINDCHECK_STOPPED');
             return initialState
         case FINDCHECK_STOPPED:
-            console.log('+++> FINDCHECK_STOPPED');
             return initialState
         case FINDCHECK_STARTED:
-            console.log('+++> FINDCHECK_STARTED');
             return {
                 ...state,
                 inProgress: true

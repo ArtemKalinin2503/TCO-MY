@@ -7,12 +7,9 @@ import "./returnScanCheck.scss";
 
 class ReturnScanCheck extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchCheck: false,
-            printCheck: false
-        }
+    state = {
+        searchCheck: false,
+        printCheck: false
     }
 
     componentDidMount() {
@@ -98,17 +95,9 @@ class ReturnScanCheck extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
+const mapDispatchToProps = (dispatch) => ({
+    getStartFindCheck: () => dispatch(getStartFindCheck()),
+    getFindCheck: () => dispatch(getFindCheck())
+})
 
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        getStartFindCheck: () => dispatch(getStartFindCheck()),
-        getFindCheck: () => dispatch(getFindCheck())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReturnScanCheck);
+export default connect(null, mapDispatchToProps)(ReturnScanCheck);

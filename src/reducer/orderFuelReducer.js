@@ -36,7 +36,6 @@ export default function OrderFuelReducer (state = initialState, action) {
             };
         case GET_ORDER_DATA:
             let dataOrder = action.payload;
-            console.log(dataOrder)
             let volumeLitres = dataOrder.fitBackOrder.volume / 100;
             //let amountPrice = dataOrder.fitBackOrder.amount / 100;
             let amountPrice = dataOrder.fitBackOrder.inputAmount / 100;

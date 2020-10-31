@@ -8,28 +8,26 @@ import {
 const initialState = {
     success: false,
     error: false,
-    timeout: false
+    timeout: false,
+    status: null
 }
 
 export default function MakeReturnReducer (state = initialState, action) {
     switch (action.type) {
         case MAKE_RETURN_RESET:
-            console.log('+++> RETURN_RESET', state);
             return initialState
         case MAKE_RETURN_SUCCESS:
-            console.log('+++> MAKE_RETURN_SUCCESS', state);
             return {
                 ...state,
-                success: true
+                success: true,
+                status: action.payload.status
             }
         case MAKE_RETURN_FAIL:
-            console.log('+++> MAKE_RETURN_FAIL', state);
             return {
                 ...state,
                 error: true
             }
         case MAKE_RETURN_TIMEOUT:
-            console.log('+++> MAKE_RETURN_TIMEOUT', state);
             return {
                 ...state,
                 timeout: true

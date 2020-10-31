@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import { connect } from "react-redux";
 import Preloader from "../Preloader/Preloader";
+import CountDownRedirect from "../CountDownRedirect/CountDownRedirect";
 import {makeReturn} from "../../actions/actionsMakeReturn"
 import "./makeReturn.scss";
 
@@ -23,23 +24,17 @@ class MakeReturn extends Component {
             checkApproved: "Возврат прошел успешно. Возьмите чек.",
             errorCheck: "По техническим причинам возврат не прошел\nОбратитесь в службу поддержки 8 (800) 000-00-00"
         }
+        this.statusMessages = {
+            'NOFILLING': "Налива небыло.",
+            'REFUNDED': "Возврат проведён. Возьмите чек.",
+            'COPYWASPRINTED': "Возврат уже проведён. Возьмите копию чека.",
+            'COPYALREADYPRINTED': "Возврат уже проведён. Копия чека уже была распечатана.",
+            'FULLYFILLED': "По этому чеку был полный налив."
+        }
     }
 
     componentDidMount() {
         this.setState({inProgress: true, message: this.messages.initial});
-    }
-
-    static checkDevicesAvailable(list) {
-        if (list) {
-            try {
-                return true;
-            }
-            // eslint-disable-next-line no-unreachable
-            catch (e) {
-                console.log('Error in MakeReturn.checkDevicesAvailable: ', e.message);
-            }
-        }
-        return false;
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -56,16 +51,15 @@ class MakeReturn extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('++++++ componentDidUpdate');
 
         if (prevState.inProgress !== this.state.inProgress
             && this.state.inProgress) {
 
-            //const {id} = this.props.match.params;
-
-                console.log('--- START REFUND, ID =', this.props.id);
-
-                this.props.makeReturn(this.props.id, false);
+                const {id} = this.props.match.params;
+                if (id) {
+                    console.log('--- START REFUND, ID =', id);
+                    this.props.makeReturn(id, false);
+                }
                 return;
         }
         if (prevState.error !== this.state.error
@@ -75,12 +69,10 @@ class MakeReturn extends Component {
         }
         if (prevState.success !== this.state.success
             && this.state.success) {
-            console.log('++++++ this.state.success -> true');
-             this.setState({inProgress: false, message: this.messages.checkApproved});
+             this.setState({inProgress: false, message: (this.statusMessages[this.props.status] || "???")});
         }
         if (prevState.timeout !== this.state.timeout
             && this.state.timeout) {
-            console.log('++++++ this.state.timeout -> true');
             this.props.makeReturn(this.props.id, true);
         }
     }
@@ -89,6 +81,7 @@ class MakeReturn extends Component {
         if (this.state.inProgress) {
             return (
                 <>
+                    <CountDownRedirect text={'Переход на главный экран через'} duration={10}/>
                     <div className="makeReturn__wrapper">
                         <div className="makeReturn__title">
                             <p>
@@ -120,6 +113,7 @@ class MakeReturn extends Component {
             if (this.state.success) {
                 return (
                     <div className="makeReturn__wrapper">
+                        <CountDownRedirect text={'Переход на главный экран через'} duration={10}/>
                         <div className="makeReturn__title">
                             <p>
                                 {this.state.message}
@@ -134,18 +128,15 @@ class MakeReturn extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        success: state.MakeReturnReducer.success,
-        error: state.MakeReturnReducer.error,
-        timeout: state.MakeReturnReducer.timeout
-    }
-}
+const mapStateToProps = (state) => ({
+    success: state.MakeReturnReducer.success,
+    error: state.MakeReturnReducer.error,
+    timeout: state.MakeReturnReducer.timeout,
+    status: state.MakeReturnReducer.status
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        makeReturn: (id, continue_) => dispatch(makeReturn(id, continue_)),
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    makeReturn: (id, continue_) => dispatch(makeReturn(id, continue_)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(MakeReturn);

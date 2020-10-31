@@ -1,5 +1,120 @@
 .quantityFuel {
   &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  &__head {
+    text-align: center;
+    font-family: "Open Sans Condensed";
+    font-weight: normal;
+    font-size: 49px;
+    margin-top: 16px;
+    margin-bottom: 5px;
+  }
+  &__pagefuel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  &__columngas {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0;
+    text-align: center;
+    font-family: "Open Sans Condensed";
+    &__text {
+      font-size: 49px;
+      margin-top: 16px;
+      font-weight: normal;
+      margin-right: 20px;
+    }
+    &__num {
+      font-weight: bold;
+      font-size: 60px;
+      color: white;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      background-color: rgb(108, 160, 5);
+    }
+    margin-right: 70px;
+  }
+  &__choosefuel {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0;
+    text-align: center;
+    font-family: "Open Sans Condensed";
+    &__text {
+      font-size: 49px;
+      margin-top: 16px;
+      font-weight: normal;
+      margin-right: 20px;
+    }
+    &__name {
+      padding-top: 30px;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+    }
+    &__fuelId {
+      height: 90px;
+      margin: 0px;
+    }
+  }
+  &__mainkey {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  &__keyboard {
+    max-width: 840px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  &__btnpay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 70px;
+    background: #45b667;
+    color: white;
+    box-shadow: 3px 3px #767676;
+    margin: 7px;
+    margin-top: 15px;
+    align-self: flex-end;
+    &:active {
+      background: #767676;
+    }
+  }
+  &__textbtn {
+    text-align: center;
+    font-family: "Open Sans Condensed";
+    font-weight: normal;
+    font-size: 49px;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+/* }
+.quantityFuel_Save {
+  &__wrapper {
     max-width: 840px;
     margin: 50px auto;
     display: flex;
@@ -13,17 +128,19 @@
     .btnPay {
       width: 140px;
     }
-  }
+  }*/
   &__info {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    color: #F7931E;
+    color: #f7931e;
     font-size: 24px;
     margin-top: 20px;
     font-weight: bold;
     flex-wrap: wrap;
+    font-family: "Open Sans Condensed";
+    font-weight: normal;
   }
   &__section-left {
     padding-right: 50px;
@@ -34,7 +151,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/images/btnTrk.png') no-repeat;
+    background: url("/images/btnTrk.png") no-repeat;
     background-size: contain;
     background-position-y: 10px;
     margin-bottom: 0;

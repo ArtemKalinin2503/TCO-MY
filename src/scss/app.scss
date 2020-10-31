@@ -1,7 +1,4 @@
-@font-face {
-  font-family: "MyWebFont";
-  src: url("/fonts/Open Sans Condensed Light.ttf") format("truetype");
-}
+@import url("/fonts/OpenSansCondensed/stylesheet.css");
 html,
 body {
   width: 100%;
@@ -20,6 +17,7 @@ body {
 .content {
   display: flex;
   flex: 1 0 auto;
+  position: relative;
 }
 
 #root {

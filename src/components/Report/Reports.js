@@ -8,13 +8,10 @@ import './Reports.scss'
 
 class Reports extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            startReportZ: false,
-            startReportX: false,
-            startReportSmena: false,
-        }
+    state = {
+        startReportZ: false,
+        startReportX: false,
+        startReportSmena: false,
     }
 
     componentDidMount() {
@@ -132,33 +129,29 @@ class Reports extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        zReportSuccess: state.ReportReducer.zReportSuccess,
-        xReportSuccess: state.ReportReducer.xReportSuccess,
-        smenaReportSuccess: state.ReportReducer.smenaReportSuccess,
-        dataSmenaSuccess: state.ReportReducer.dataSmenaSuccess,
-        messages: state.StatusDeviceReducer.messages,
-        //Для preloader
-        zReportLoading: state.ReportReducer.zReportLoading,
-        xReportLoading: state.ReportReducer.xReportLoading,
-        smenaReportLoading: state.ReportReducer.smenaReportLoading,
-        //Error
-        zReportError: state.ReportReducer.zReportError,
-        xReportError: state.ReportReducer.xReportError,
-        smenaReportError: state.ReportReducer.smenaReportError,
-    }
-}
+const mapStateToProps = (state) => ({
+    zReportSuccess: state.ReportReducer.zReportSuccess,
+    xReportSuccess: state.ReportReducer.xReportSuccess,
+    smenaReportSuccess: state.ReportReducer.smenaReportSuccess,
+    dataSmenaSuccess: state.ReportReducer.dataSmenaSuccess,
+    messages: state.StatusDeviceReducer.messages,
+    //Для preloader
+    zReportLoading: state.ReportReducer.zReportLoading,
+    xReportLoading: state.ReportReducer.xReportLoading,
+    smenaReportLoading: state.ReportReducer.smenaReportLoading,
+    //Error
+    zReportError: state.ReportReducer.zReportError,
+    xReportError: state.ReportReducer.xReportError,
+    smenaReportError: state.ReportReducer.smenaReportError,
+})
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getReportZ: () => dispatch(getReportZ()),
-        getReportX: () => dispatch(getReportX()),
-        getReportSmena: (id) => dispatch(getReportSmena(id)),
-        getDataSmena: () => dispatch(getDataSmena()),
-        getDataMessages: () => dispatch(getDataMessages()),
-        clearAllReports: () => dispatch(clearAllReports()),
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getReportZ: () => dispatch(getReportZ()),
+    getReportX: () => dispatch(getReportX()),
+    getReportSmena: (id) => dispatch(getReportSmena(id)),
+    getDataSmena: () => dispatch(getDataSmena()),
+    getDataMessages: () => dispatch(getDataMessages()),
+    clearAllReports: () => dispatch(clearAllReports()),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reports);
